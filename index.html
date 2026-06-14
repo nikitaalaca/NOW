@@ -42,7 +42,7 @@
       width: 100%;
       overflow: hidden;
       font-family: var(--font);
-      background: #000;
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -69,173 +69,6 @@
       }
     }
 
-    .register-screen {
-      position: absolute;
-      inset: 0;
-      background: var(--bg);
-      z-index: 300;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      gap: 24px;
-    }
-
-    .register-logo {
-      font-size: 48px;
-      font-weight: 700;
-      letter-spacing: -1.5px;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    .register-logo .logo-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      margin-left: 5px;
-      vertical-align: super;
-    }
-
-    .register-subtitle {
-      font-size: 16px;
-      color: var(--text-secondary);
-      text-align: center;
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-
-    .avatar-upload-big {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: all var(--transition);
-      font-size: 48px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      border: 3px dashed #D1D1D6;
-    }
-
-    .avatar-upload-big:active {
-      transform: scale(0.95);
-      background: #EEEEF5;
-    }
-
-    .avatar-upload-big img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .avatar-upload-big.has-photo {
-      border: 3px solid var(--accent-green);
-    }
-
-    .avatar-upload-overlay-big {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity var(--transition);
-      border-radius: 50%;
-    }
-
-    .avatar-upload-big:active .avatar-upload-overlay-big {
-      opacity: 1;
-    }
-
-    .input-group {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .input-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      letter-spacing: -0.1px;
-      margin-left: 4px;
-    }
-
-    .register-input {
-      width: 100%;
-      padding: 16px 18px;
-      border-radius: var(--radius-md);
-      border: none;
-      background: var(--surface);
-      font-size: 16px;
-      font-family: var(--font);
-      outline: none;
-      letter-spacing: -0.2px;
-      transition: all var(--transition);
-      box-shadow: var(--shadow-card);
-    }
-
-    .register-input:focus {
-      box-shadow: 0 0 0 3px rgba(0,102,255,0.2);
-      background: #FAFAFF;
-    }
-
-    .register-btn {
-      width: 100%;
-      padding: 18px;
-      border-radius: var(--radius-md);
-      background: var(--accent);
-      color: white;
-      border: none;
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      cursor: pointer;
-      transition: all var(--transition);
-      box-shadow: var(--shadow-button);
-      margin-top: 8px;
-    }
-
-    .register-btn:active {
-      transform: scale(0.97);
-      background: #0055DD;
-    }
-
-    .register-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .error-text {
-      color: var(--accent-red);
-      font-size: 13px;
-      font-weight: 500;
-      text-align: center;
-      min-height: 20px;
-    }
-
-    .main-screen {
-      display: none;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .main-screen.active {
-      display: flex;
-    }
-
     .toast {
       position: absolute;
       top: 20px;
@@ -254,11 +87,9 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       white-space: nowrap;
     }
-
     .toast.show { transform: translateX(-50%) translateY(0); }
     .toast.success { background: var(--accent-green); }
     .toast.warning { background: var(--accent-orange); }
-    .toast.error { background: var(--accent-red); }
 
     .content {
       flex: 1;
@@ -271,7 +102,6 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
     }
-
     .content::-webkit-scrollbar { width: 0; }
 
     .header {
@@ -281,27 +111,27 @@
       padding: 0 2px;
       flex-shrink: 0;
     }
-
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .logo {
       font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.8px;
       color: var(--text);
     }
-
     .logo-dot {
       display: inline-block;
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       background: var(--accent);
       border-radius: 50%;
       margin-left: 3px;
       vertical-align: super;
     }
-
     .live-badge {
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 10px; font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       padding: 4px 10px;
@@ -312,11 +142,22 @@
       transform: scale(0.8);
       transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
     .live-badge.visible {
       opacity: 1;
       transform: scale(1);
     }
+    .header-pill {
+      font-size: 12px; font-weight: 600;
+      padding: 7px 15px;
+      border-radius: var(--radius-full);
+      background: var(--surface);
+      color: var(--text-secondary);
+      letter-spacing: 0.1px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .header-pill:active { background: #F0F0F5; }
 
     .status-card {
       background: var(--surface);
@@ -329,68 +170,43 @@
       transition: all var(--transition);
       flex-shrink: 0;
     }
-
     .status-card.live {
       background: #F8FFFA;
     }
-
     .status-row {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-
     .user-avatar {
-      width: 46px;
-      height: 46px;
+      width: 46px; height: 46px;
       border-radius: 50%;
       background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 19px;
-      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 600;
       color: var(--text-secondary);
       flex-shrink: 0;
-      overflow: hidden;
-      cursor: pointer;
+      transition: all var(--transition);
     }
-
-    .user-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
+    .status-card.live .user-avatar {
+      background: #E8F8EC;
+      color: var(--accent-green);
     }
-
     .status-info { flex: 1; }
-
-    .status-name {
-      font-weight: 600;
-      font-size: 16px;
-      letter-spacing: -0.2px;
-    }
-
-    .status-subtitle {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-top: 2px;
-    }
-
+    .status-name { font-weight: 600; font-size: 16px; letter-spacing: -0.2px; }
+    .status-subtitle { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; transition: all var(--transition); }
     .status-indicator {
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       background: #D1D1D6;
+      transition: all var(--transition);
       flex-shrink: 0;
     }
-
     .status-indicator.live {
       background: var(--accent-green);
       box-shadow: 0 0 10px rgba(30,212,94,0.4);
       animation: pulse 2.5s ease-in-out infinite;
     }
-
     @keyframes pulse {
       0%,100% { box-shadow: 0 0 6px rgba(30,212,94,0.25); }
       50% { box-shadow: 0 0 16px rgba(30,212,94,0.5); }
@@ -400,29 +216,70 @@
       width: 100%;
       padding: 15px 24px;
       border-radius: var(--radius-md);
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 16px; font-weight: 600;
       letter-spacing: -0.2px;
       cursor: pointer;
       border: none;
       color: white;
       background: var(--accent);
       transition: all var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       gap: 8px;
       box-shadow: var(--shadow-button);
+      position: relative;
+      overflow: hidden;
     }
-
+    .btn-main::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
+      border-radius: var(--radius-md);
+      pointer-events: none;
+    }
     .btn-main:active { transform: scale(0.97); background: #0055DD; }
-
     .btn-main.is-active {
       background: var(--accent-green);
       box-shadow: var(--shadow-button-green);
     }
-
     .btn-main.is-active:active { background: #18B84E; }
+    .btn-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .quick-action {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: -0.1px;
+    }
+    .quick-action:active {
+      transform: scale(0.95);
+      background: #F5F5FA;
+    }
+
+    .section-label {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-tertiary);
+      padding: 0 2px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
     .mood-scroll {
       display: flex;
@@ -432,53 +289,44 @@
       padding: 2px 0;
       flex-shrink: 0;
     }
-
     .mood-scroll::-webkit-scrollbar { display: none; }
-
     .mood-chip {
       padding: 10px 18px;
       border-radius: var(--radius-full);
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 14px; font-weight: 500;
       white-space: nowrap;
       background: var(--surface);
       cursor: pointer;
       transition: all var(--transition);
       color: var(--text-secondary);
+      letter-spacing: -0.1px;
       box-shadow: var(--shadow-card);
       flex-shrink: 0;
+      position: relative;
     }
-
     .mood-chip:active { transform: scale(0.94); }
-
     .mood-chip.selected {
       background: var(--text);
       color: white;
       font-weight: 600;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
     }
 
     .people-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0 2px;
       flex-shrink: 0;
     }
-
     .people-title { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; }
     .people-count { font-size: 13px; font-weight: 500; color: var(--text-tertiary); }
 
     .people-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: flex; flex-direction: column; gap: 8px;
       flex-shrink: 0;
     }
 
     .person-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 14px;
       background: var(--surface);
       border-radius: var(--radius-lg);
       padding: 15px 17px;
@@ -487,119 +335,106 @@
       box-shadow: var(--shadow-card);
       animation: cardIn 0.35s ease forwards;
       opacity: 0;
+      position: relative;
+      overflow: hidden;
     }
-
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .person-card:active { transform: scale(0.98); background: #F9F9FC; }
+    .person-card.urgent { border-left: 3px solid var(--accent-red); }
 
     .person-avatar {
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       border-radius: 50%;
       background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 19px;
-      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 600;
       color: var(--text-secondary);
       flex-shrink: 0;
       position: relative;
-      overflow: hidden;
     }
-
-    .person-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
     .person-avatar .online-dot {
-      position: absolute;
-      bottom: 1px;
-      right: 1px;
-      width: 10px;
-      height: 10px;
+      position: absolute; bottom: 1px; right: 1px;
+      width: 10px; height: 10px;
       background: var(--accent-green);
       border-radius: 50%;
       border: 2px solid white;
     }
 
     .person-info { flex: 1; min-width: 0; }
-    .person-name { font-weight: 600; font-size: 15px; }
-    .person-mood { font-size: 13px; color: var(--text-tertiary); }
-    .person-distance { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
-
-    .person-timer {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-      flex-shrink: 0;
+    .person-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+    .person-name { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
+    .person-tag {
+      font-size: 10px; font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+    .person-tag.friend { background: #EEF2FF; color: #4B6BFF; }
+    .person-tag.mutual { background: #F5F0FF; color: var(--accent-purple); }
+    .person-mood { font-size: 13px; color: var(--text-tertiary); letter-spacing: -0.1px; }
+    .person-distance {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
     }
 
+    .person-timer {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      flex-shrink: 0;
+    }
     .timer-value {
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 12px; font-weight: 600;
       padding: 5px 10px;
       border-radius: var(--radius-full);
       background: #F5F5FA;
       color: var(--text-secondary);
+      letter-spacing: -0.1px;
+      transition: all var(--transition);
     }
-
+    .timer-value.critical {
+      background: #FFF0F0;
+      color: var(--accent-red);
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
     .chat-hint {
-      font-size: 11px;
-      color: var(--text-tertiary);
-      opacity: 0;
+      font-size: 11px; color: var(--text-tertiary);
+      opacity: 0; transition: opacity var(--transition);
     }
-
     .person-card:active .chat-hint { opacity: 0.8; }
 
     .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 48px 20px;
-      text-align: center;
-      gap: 10px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 48px 20px; text-align: center; gap: 10px;
     }
-
     .empty-circle {
-      width: 64px;
-      height: 64px;
+      width: 64px; height: 64px;
       border-radius: 50%;
       background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin-bottom: 6px;
     }
-
-    .empty-title { font-weight: 600; font-size: 16px; }
+    .empty-circle svg { width: 26px; height: 26px; stroke: var(--text-tertiary); fill: none; stroke-width: 1.5; }
+    .empty-title { font-weight: 600; font-size: 16px; letter-spacing: -0.2px; }
     .empty-desc { font-size: 13px; color: var(--text-tertiary); max-width: 220px; line-height: 1.5; }
 
     .modal-backdrop {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: rgba(0,0,0,0.25);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 100;
-      display: flex;
-      align-items: flex-end;
+      display: flex; align-items: flex-end;
       animation: fadeIn 0.2s ease;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .chat-sheet {
       width: 100%;
       background: var(--surface);
@@ -607,265 +442,169 @@
       padding: 20px 20px 34px;
       box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
       animation: slideUp 0.35s cubic-bezier(0.32,0.72,0,1);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      display: flex; flex-direction: column; gap: 16px;
       max-height: 70%;
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     .chat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-
     .chat-header-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .chat-avatar-sm {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 50%;
       background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 600;
       color: var(--text-secondary);
-      overflow: hidden;
     }
-
-    .chat-avatar-sm img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .chat-title { font-size: 18px; font-weight: 700; }
+    .chat-title { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
     .chat-subtitle { font-size: 11px; color: var(--accent-green); font-weight: 500; }
-
     .chat-close {
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       border-radius: 50%;
       background: #F5F5FA;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 16px;
-      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; color: var(--text-secondary);
+      transition: all var(--transition);
     }
-
     .chat-close:active { background: #E8E8F0; transform: scale(0.9); }
-
     .chat-messages {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 4px 0;
+      display: flex; flex-direction: column; gap: 8px;
+      max-height: 200px; overflow-y: auto;
     }
-
     .msg {
       padding: 12px 16px;
       border-radius: 18px;
       max-width: 80%;
-      font-size: 14px;
-      line-height: 1.45;
-      animation: msgIn 0.3s ease;
+      font-size: 14px; line-height: 1.45; letter-spacing: -0.1px;
     }
-
-    @keyframes msgIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .msg.incoming {
-      background: #F5F5FA;
-      align-self: flex-start;
-      border-bottom-left-radius: 6px;
-    }
-
-    .msg.outgoing {
-      background: var(--accent);
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 6px;
-    }
-
-    .chat-input-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
+    .msg.incoming { background: #F5F5FA; align-self: flex-start; border-bottom-left-radius: 6px; }
+    .msg.outgoing { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 6px; }
+    .chat-input-row { display: flex; gap: 8px; align-items: center; }
     .chat-input {
       flex: 1;
       padding: 13px 16px;
       border-radius: var(--radius-full);
       border: none;
       background: #F5F5FA;
-      font-size: 14px;
-      font-family: var(--font);
-      outline: none;
+      font-size: 14px; font-family: var(--font);
+      outline: none; letter-spacing: -0.1px;
+      transition: all var(--transition);
     }
-
     .chat-input:focus { background: #EEEEF5; }
-
     .chat-send {
-      width: 42px;
-      height: 42px;
+      width: 42px; height: 42px;
       border-radius: 50%;
       background: var(--accent);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--transition);
       flex-shrink: 0;
     }
-
     .chat-send:active { transform: scale(0.9); background: #0055DD; }
-
-    .chat-send svg {
-      width: 18px;
-      height: 18px;
-      stroke: white;
-      fill: none;
-      stroke-width: 2.5;
-    }
+    .chat-send svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2.5; }
 
     .bottom-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 12px 22px 20px;
-      font-size: 11px;
-      color: var(--text-tertiary);
+      font-size: 11px; color: var(--text-tertiary);
+      letter-spacing: 0.2px;
       background: var(--bg);
       flex-shrink: 0;
+      gap: 12px;
     }
-
+    .bottom-bar .premium {
+      color: var(--accent); font-weight: 600; cursor: pointer;
+      transition: opacity var(--transition);
+      background: rgba(0,102,255,0.06);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+    }
+    .bottom-bar .premium:active { opacity: 0.6; }
     .bottom-dot {
-      width: 4px;
-      height: 4px;
+      width: 4px; height: 4px;
       background: var(--accent-green);
       border-radius: 50%;
       display: inline-block;
       margin-right: 4px;
     }
-
-    .unread-badge {
-      background: var(--accent-red);
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 10px;
-      margin-left: 6px;
-    }
   </style>
 </head>
 <body>
   <div class="app" id="app">
-    <!-- Экран регистрации -->
-    <div class="register-screen" id="registerScreen">
-      <div class="register-logo">сейчас<span class="logo-dot"></span></div>
-      <div class="register-subtitle">Найди компанию<br>прямо сейчас</div>
-      
-      <div class="avatar-upload-big" id="avatarUploadBig">
-        <span id="avatarPlaceholderBig">👤</span>
-        <div class="avatar-upload-overlay-big">
-          <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        </div>
-      </div>
-      <input type="file" id="avatarInputRegister" accept="image/*" capture="environment" style="display:none;">
-      
-      <div class="input-group">
-        <label class="input-label">Никнейм</label>
-        <input class="register-input" id="nicknameInput" placeholder="Как вас зовут?" maxlength="20" autocomplete="off">
-      </div>
-      
-      <div class="error-text" id="errorText"></div>
-      
-      <button class="register-btn" id="registerBtn">Продолжить</button>
-    </div>
-
-    <!-- Основной экран -->
-    <div class="main-screen" id="mainScreen">
-      <div class="toast" id="toast"></div>
-      <div class="content" id="mainContent">
-        <div class="header">
+    <div class="toast" id="toast"></div>
+    <div class="content" id="mainContent">
+      <div class="header">
+        <div class="logo-row">
           <span class="logo">сейчас<span class="logo-dot"></span></span>
           <span class="live-badge" id="liveBadge">LIVE</span>
         </div>
-
-        <div class="status-card" id="statusCard">
-          <div class="status-row">
-            <div class="user-avatar" id="userAvatar"></div>
-            <div class="status-info">
-              <div class="status-name" id="userName"></div>
-              <div class="status-subtitle" id="statusSubtitle">Не в сети</div>
-            </div>
-            <div class="status-indicator" id="statusDot"></div>
-          </div>
-          <button class="btn-main" id="freeBtn">
-            <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M10 6v8M6 10h8"/></svg>
-            <span id="freeBtnText">Стать доступным</span>
-          </button>
-        </div>
-
-        <div class="section-label"><span>Настроение</span></div>
-        <div class="mood-scroll" id="moodScroll">
-          <div class="mood-chip selected" data-mood="coffee">☕️ Кофе</div>
-          <div class="mood-chip" data-mood="bar">🍸 Бар</div>
-          <div class="mood-chip" data-mood="walk">🚶 Прогулка</div>
-          <div class="mood-chip" data-mood="games">🎲 Настолки</div>
-          <div class="mood-chip" data-mood="cinema">🎬 Кино</div>
-          <div class="mood-chip" data-mood="sport">⚽️ Спорт</div>
-        </div>
-
-        <div class="people-header">
-          <span class="people-title">Рядом</span>
-          <span class="people-count" id="peopleCount">Загрузка...</span>
-        </div>
-        <div class="people-list" id="peopleList"></div>
-        <div class="empty-state" id="emptyState" style="display:none;">
-          <div class="empty-circle">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-          </div>
-          <div class="empty-title">Никого поблизости</div>
-          <div class="empty-desc">Смените настроение или станьте доступным</div>
-        </div>
+        <span class="header-pill" id="radiusPill">радиус 2 км</span>
       </div>
 
-      <div class="bottom-bar">
-        <span><span class="bottom-dot"></span> Чаты живут 24 часа</span>
-        <span id="connectionStatus">Подключение...</span>
+      <div class="status-card" id="statusCard">
+        <div class="status-row">
+          <div class="user-avatar" id="userAvatar">YS</div>
+          <div class="status-info">
+            <div class="status-name">Вы</div>
+            <div class="status-subtitle" id="statusSubtitle">Не в сети</div>
+          </div>
+          <div class="status-indicator" id="statusDot"></div>
+        </div>
+        <button class="btn-main" id="freeBtn">
+          <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M10 6v8M6 10h8"/></svg>
+          <span id="freeBtnText">Стать доступным</span>
+        </button>
+      </div>
+
+      <div class="quick-actions">
+        <div class="quick-action" id="qaNearby">Рядом</div>
+        <div class="quick-action" id="qaFriends">Друзья</div>
+        <div class="quick-action" id="qaParty">Вечеринки</div>
+      </div>
+
+      <div class="section-label"><span>Настроение</span></div>
+      <div class="mood-scroll" id="moodScroll">
+        <div class="mood-chip selected" data-mood="coffee">Кофе</div>
+        <div class="mood-chip" data-mood="bar">Бар</div>
+        <div class="mood-chip" data-mood="walk">Прогулка</div>
+        <div class="mood-chip" data-mood="games">Настолки</div>
+        <div class="mood-chip" data-mood="cinema">Кино</div>
+        <div class="mood-chip" data-mood="sport">Спорт</div>
+      </div>
+
+      <div class="people-header">
+        <span class="people-title">Рядом</span>
+        <span class="people-count" id="peopleCount">0 человек</span>
+      </div>
+      <div class="people-list" id="peopleList"></div>
+      <div class="empty-state" id="emptyState">
+        <div class="empty-circle">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div class="empty-title">Никого поблизости</div>
+        <div class="empty-desc">Смените настроение или расширьте радиус</div>
       </div>
     </div>
 
-    <!-- Чат -->
+    <div class="bottom-bar">
+      <span><span class="bottom-dot"></span> Чаты живут 24 часа</span>
+      <span class="premium" id="premiumLink">Premium</span>
+    </div>
+
     <div class="modal-backdrop" id="chatModal" style="display:none;">
       <div class="chat-sheet">
         <div class="chat-header">
           <div class="chat-header-left">
-            <div class="chat-avatar-sm" id="chatAvatar"></div>
+            <div class="chat-avatar-sm" id="chatAvatar">A</div>
             <div>
               <div class="chat-title" id="chatTitle">Чат</div>
-              <div class="chat-subtitle" id="chatSubtitle">в сети</div>
+              <div class="chat-subtitle">в сети</div>
             </div>
           </div>
           <div class="chat-close" id="chatClose">✕</div>
@@ -898,55 +637,21 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Включаем оффлайн-режим
-    db.enablePersistence().catch((err) => {
-      console.warn('Offline persistence failed:', err);
-    });
-
-    // Состояние приложения
+    // Генерируем ID пользователя
+    const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+    
     const state = {
-      isRegistered: false,
       isFree: false,
       mood: 'coffee',
       people: [],
       chat: null,
       messages: [],
       toastTimer: null,
-      userLocation: null,
-      userProfile: {
-        id: '',
-        name: '',
-        avatar: null,
-        init: ''
-      },
-      chatUnsubscribe: null,
-      peopleUnsubscribe: null
     };
 
     const $ = s => document.querySelector(s);
     const $$ = s => document.querySelectorAll(s);
 
-    const moodNames = {
-      coffee: '☕️ Кофе',
-      bar: '🍸 Бар',
-      walk: '🚶 Прогулка',
-      games: '🎲 Настолки',
-      cinema: '🎬 Кино',
-      sport: '⚽️ Спорт'
-    };
-
-    const fmt = m => m < 60 ? `${m} мин` : `${Math.floor(m / 60)} ч ${m % 60} мин`;
-
-    // DOM элементы
-    const registerScreen = $('#registerScreen');
-    const avatarUploadBig = $('#avatarUploadBig');
-    const avatarInputRegister = $('#avatarInputRegister');
-    const nicknameInput = $('#nicknameInput');
-    const errorText = $('#errorText');
-    const registerBtn = $('#registerBtn');
-
-    const mainScreen = $('#mainScreen');
-    const toast = $('#toast');
     const statusCard = $('#statusCard');
     const statusDot = $('#statusDot');
     const statusSubtitle = $('#statusSubtitle');
@@ -954,141 +659,53 @@
     const freeBtnText = $('#freeBtnText');
     const liveBadge = $('#liveBadge');
     const userAvatar = $('#userAvatar');
-    const userName = $('#userName');
     const moodScroll = $('#moodScroll');
     const peopleList = $('#peopleList');
     const peopleCount = $('#peopleCount');
     const emptyState = $('#emptyState');
     const chatModal = $('#chatModal');
     const chatTitle = $('#chatTitle');
-    const chatSubtitle = $('#chatSubtitle');
     const chatAvatar = $('#chatAvatar');
     const chatMessages = $('#chatMessages');
     const chatInput = $('#chatInput');
     const chatClose = $('#chatClose');
     const chatSend = $('#chatSend');
+    const premiumLink = $('#premiumLink');
     const mainContent = $('#mainContent');
-    const connectionStatus = $('#connectionStatus');
+    const toast = $('#toast');
 
-    // Уведомления
+    const moodNames = { coffee:'Кофе', bar:'Бар', walk:'Прогулка', games:'Настолки', cinema:'Кино', sport:'Спорт' };
+    const fmt = m => m<60 ? `${m} мин` : `${Math.floor(m/60)} ч ${m%60} мин`;
+
     function showToast(msg, type = '') {
       if (state.toastTimer) clearTimeout(state.toastTimer);
       toast.textContent = msg;
       toast.className = `toast ${type}`;
       requestAnimationFrame(() => {
         toast.classList.add('show');
-        state.toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+        state.toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
       });
-    }
-
-    // Геолокация
-    function requestGeolocation() {
-      return new Promise((resolve) => {
-        if (!navigator.geolocation) {
-          state.userLocation = { lat: 55.7558, lng: 37.6176 };
-          resolve(state.userLocation);
-          return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            state.userLocation = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            resolve(state.userLocation);
-          },
-          () => {
-            state.userLocation = { lat: 55.7558, lng: 37.6176 };
-            resolve(state.userLocation);
-          },
-          { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 }
-        );
-      });
-    }
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
-      const dLat = (lat2 - lat1) * Math.PI / 180;
-      const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c;
-    }
-
-    // Обновление пользователя в Firebase
-    function updateUserInFirebase() {
-      if (!state.isFree || !state.isRegistered) return;
-
-      const userData = {
-        name: state.userProfile.name,
-        init: state.userProfile.init,
-        mood: state.mood,
-        time: 1440,
-        online: true,
-        lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      if (state.userProfile.avatar) {
-        userData.avatar = state.userProfile.avatar;
-      }
-
-      if (state.userLocation) {
-        userData.location = new firebase.firestore.GeoPoint(
-          state.userLocation.lat,
-          state.userLocation.lng
-        );
-      }
-
-      db.collection('people').doc(state.userProfile.id).set(userData, { merge: true });
     }
 
     // Загрузка людей из Firebase
     function loadPeople() {
-      if (state.peopleUnsubscribe) {
-        state.peopleUnsubscribe();
-      }
-
-      state.peopleUnsubscribe = db.collection('people')
+      db.collection('people')
         .where('mood', '==', state.mood)
         .where('online', '==', true)
         .onSnapshot(snapshot => {
           state.people = [];
           snapshot.forEach(doc => {
-            if (doc.id !== state.userProfile.id) {
-              const data = doc.data();
-              let distText = 'рядом';
-
-              if (data.location && state.userLocation) {
-                const dist = getDistance(
-                  state.userLocation.lat,
-                  state.userLocation.lng,
-                  data.location.latitude || data.location._lat,
-                  data.location.longitude || data.location._long
-                );
-                distText = dist < 1 ? `${Math.round(dist * 1000)} м` : `${dist.toFixed(1)} км`;
-              }
-
-              state.people.push({
-                id: doc.id,
-                ...data,
-                dist: distText,
-                avatar: data.avatar || null
-              });
+            if (doc.id !== userId) {
+              state.people.push({ id: doc.id, ...doc.data() });
             }
           });
           renderPeople();
-        }, (error) => {
-          console.error('Error loading people:', error);
-          showToast('Ошибка загрузки', 'error');
         });
     }
 
     function renderPeople() {
       peopleList.innerHTML = '';
-
+      
       if (state.people.length === 0) {
         emptyState.style.display = 'flex';
         peopleCount.textContent = '0 человек';
@@ -1099,27 +716,24 @@
       peopleCount.textContent = `${state.people.length} чел.`;
 
       state.people.forEach((p, i) => {
+        const urgent = p.time < 15;
         const card = document.createElement('div');
-        card.className = 'person-card';
+        card.className = `person-card${urgent ? ' urgent' : ''}`;
         card.style.animationDelay = `${i * 0.05}s`;
-        card.style.opacity = '1';
-
-        const avatarHTML = p.avatar
-          ? `<img src="${p.avatar}" alt="${p.name}">`
-          : p.init;
-
         card.innerHTML = `
-          <div class="person-avatar">${avatarHTML}<span class="online-dot"></span></div>
+          <div class="person-avatar">${p.init}<span class="online-dot"></span></div>
           <div class="person-info">
-            <div class="person-name">${p.name}</div>
-            <div class="person-mood">${moodNames[p.mood] || p.mood}</div>
+            <div class="person-name-row">
+              <span class="person-name">${p.name}</span>
+              <span class="person-tag ${p.rel==='friend'?'friend':'mutual'}">${p.rel==='friend'?'друг':'общий'}</span>
+            </div>
+            <div class="person-mood">${moodNames[p.mood]}</div>
             <div class="person-distance">${p.dist}</div>
           </div>
           <div class="person-timer">
-            <span class="timer-value">${fmt(p.time)}</span>
+            <span class="timer-value${urgent?' critical':''}">${fmt(p.time)}</span>
             <span class="chat-hint">Написать</span>
           </div>`;
-
         card.addEventListener('click', () => openChat(p));
         peopleList.appendChild(card);
       });
@@ -1133,10 +747,8 @@
         freeBtnText.textContent = 'Завершить';
         freeBtn.classList.add('is-active');
         liveBadge.classList.add('visible');
-        if (!state.userProfile.avatar) {
-          userAvatar.style.background = '#E8F8EC';
-          userAvatar.style.color = '#1ED45E';
-        }
+        userAvatar.style.background = '#E8F8EC';
+        userAvatar.style.color = '#1ED45E';
       } else {
         statusCard.classList.remove('live');
         statusDot.classList.remove('live');
@@ -1144,10 +756,8 @@
         freeBtnText.textContent = 'Стать доступным';
         freeBtn.classList.remove('is-active');
         liveBadge.classList.remove('visible');
-        if (!state.userProfile.avatar) {
-          userAvatar.style.background = '#F5F5FA';
-          userAvatar.style.color = '#6E6E73';
-        }
+        userAvatar.style.background = '#F5F5FA';
+        userAvatar.style.color = '#6E6E73';
       }
     }
 
@@ -1156,77 +766,57 @@
       $$('.mood-chip').forEach(c => c.classList.remove('selected'));
       const chip = document.querySelector(`.mood-chip[data-mood="${mood}"]`);
       if (chip) chip.classList.add('selected');
-
+      
       if (state.isFree) {
-        updateUserInFirebase();
+        db.collection('people').doc(userId).update({ mood });
       }
     }
 
-    async function toggleFree() {
-      if (!state.isRegistered) return;
-
-      if (!state.userLocation) {
-        await requestGeolocation();
-      }
-
+    function toggleFree() {
       state.isFree = !state.isFree;
       updateStatusUI();
 
       if (state.isFree) {
-        updateUserInFirebase();
+        db.collection('people').doc(userId).set({
+          name: 'Вы',
+          init: 'YS',
+          mood: state.mood,
+          rel: 'friend',
+          time: 1440,
+          online: true,
+          dist: 'здесь'
+        });
         showToast('Вы в эфире!', 'success');
       } else {
-        await db.collection('people').doc(state.userProfile.id).update({
-          online: false,
-          lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(() => {
-          db.collection('people').doc(state.userProfile.id).delete();
-        });
+        db.collection('people').doc(userId).delete();
         showToast('Вы не в сети');
       }
     }
 
     // Чат через Firebase
     function getChatId(personId) {
-      const ids = [state.userProfile.id, personId].sort();
+      const ids = [userId, personId].sort();
       return `chat_${ids[0]}_${ids[1]}`;
     }
 
     function openChat(person) {
       state.chat = person;
       const chatId = getChatId(person.id);
-
+      
       chatTitle.textContent = person.name;
-      chatSubtitle.textContent = 'в сети';
+      chatAvatar.textContent = person.init;
 
-      if (person.avatar) {
-        chatAvatar.innerHTML = `<img src="${person.avatar}" alt="${person.name}">`;
-      } else {
-        chatAvatar.textContent = person.init || '?';
-      }
-
-      // Отписываемся от предыдущего чата
-      if (state.chatUnsubscribe) {
-        state.chatUnsubscribe();
-      }
-
-      // Подписываемся на сообщения из Firebase
-      state.chatUnsubscribe = db.collection('chats')
+      // Загружаем сообщения из Firebase
+      db.collection('chats')
         .doc(chatId)
         .collection('messages')
         .orderBy('timestamp', 'asc')
         .onSnapshot(snapshot => {
           state.messages = [];
           snapshot.forEach(doc => {
-            state.messages.push({
-              id: doc.id,
-              ...doc.data()
-            });
+            state.messages.push({ id: doc.id, ...doc.data() });
           });
           renderChat();
-        }, (error) => {
-          console.error('Error loading messages:', error);
-          showToast('Ошибка загрузки чата', 'error');
         });
 
       chatModal.style.display = 'flex';
@@ -1235,10 +825,6 @@
     }
 
     function closeChatFn() {
-      if (state.chatUnsubscribe) {
-        state.chatUnsubscribe();
-        state.chatUnsubscribe = null;
-      }
       chatModal.style.display = 'none';
       state.chat = null;
       state.messages = [];
@@ -1248,242 +834,49 @@
     async function sendMsg() {
       const text = chatInput.value.trim();
       if (!text || !state.chat) return;
-
+      
       const chatId = getChatId(state.chat.id);
+      
+      // Сохраняем сообщение в Firebase
+      await db.collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .add({
+          text,
+          senderId: userId,
+          type: 'outgoing',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      
       chatInput.value = '';
-
-      const message = {
-        text,
-        senderId: state.userProfile.id,
-        senderName: state.userProfile.name,
-        type: 'outgoing',
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      try {
-        // Сохраняем сообщение в Firebase
+      renderChat();
+      
+      // Автоответ через Firebase
+      setTimeout(async () => {
+        const replies = ['Отлично!', 'Буду через 15 мин', 'Договорились!', 'Жду'];
         await db.collection('chats')
           .doc(chatId)
           .collection('messages')
-          .add(message);
-
-        // Обновляем метаданные чата
-        await db.collection('chats').doc(chatId).set({
-          participants: [state.userProfile.id, state.chat.id],
-          lastMessage: text,
-          lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
-          [`unread_${state.chat.id}`]: firebase.firestore.FieldValue.increment(1)
-        }, { merge: true });
-
-        // Отправляем автоответ от собеседника
-        setTimeout(async () => {
-          const replies = [
-            'Отлично! Давай встретимся!',
-            'Я рядом, буду через 10 мин',
-            'Договорились!',
-            'Жду тебя!',
-            'Классная идея!'
-          ];
-          
-          await db.collection('chats')
-            .doc(chatId)
-            .collection('messages')
-            .add({
-              text: replies[Math.floor(Math.random() * replies.length)],
-              senderId: state.chat.id,
-              senderName: state.chat.name,
-              type: 'incoming',
-              timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-          await db.collection('chats').doc(chatId).set({
-            lastMessage: 'Новое сообщение',
-            lastMessageTime: firebase.firestore.FieldValue.serverTimestamp(),
-            [`unread_${state.userProfile.id}`]: firebase.firestore.FieldValue.increment(1)
-          }, { merge: true });
-        }, 2000);
-
-      } catch (error) {
-        console.error('Error sending message:', error);
-        showToast('Ошибка отправки', 'error');
-      }
+          .add({
+            text: replies[Math.floor(Math.random() * replies.length)],
+            senderId: state.chat.id,
+            type: 'incoming',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+      }, 1000);
     }
 
     function renderChat() {
       chatMessages.innerHTML = state.messages.map(m => {
-        const isOutgoing = m.senderId === state.userProfile.id;
-        return `<div class="msg ${isOutgoing ? 'outgoing' : 'incoming'}">
-          <div style="font-size:10px;opacity:0.7;margin-bottom:2px;">${m.senderName}</div>
-          ${m.text}
-        </div>`;
+        const isOutgoing = m.senderId === userId;
+        return `<div class="msg ${isOutgoing ? 'outgoing' : 'incoming'}">${m.text}</div>`;
       }).join('');
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Регистрация
-    function validateRegistration() {
-      const name = nicknameInput.value.trim();
-      if (!name) {
-        errorText.textContent = 'Введите никнейм';
-        return false;
-      }
-      if (name.length < 2) {
-        errorText.textContent = 'Никнейм должен быть от 2 символов';
-        return false;
-      }
-      errorText.textContent = '';
-      return true;
-    }
-
-    async function completeRegistration() {
-      if (!validateRegistration()) return;
-
-      const name = nicknameInput.value.trim();
-      const init = name.substring(0, 2).toUpperCase();
-      const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-
-      state.userProfile = {
-        id: userId,
-        name: name,
-        init: init,
-        avatar: state.userProfile.avatar
-      };
-
-      // Сохраняем в localStorage
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('userName', name);
-      localStorage.setItem('userInit', init);
-      if (state.userProfile.avatar) {
-        localStorage.setItem('userAvatar', state.userProfile.avatar);
-      }
-
-      state.isRegistered = true;
-
-      // Создаем профиль в Firebase
-      try {
-        await db.collection('users').doc(userId).set({
-          name: name,
-          init: init,
-          avatar: state.userProfile.avatar || null,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      } catch (error) {
-        console.error('Error creating user profile:', error);
-      }
-
-      // Обновляем UI
-      userName.textContent = name;
-      if (state.userProfile.avatar) {
-        userAvatar.innerHTML = `<img src="${state.userProfile.avatar}" alt="avatar">`;
-      } else {
-        userAvatar.textContent = init;
-      }
-
-      // Показываем основной экран
-      registerScreen.style.display = 'none';
-      mainScreen.classList.add('active');
-
-      // Загружаем данные
-      updateStatusUI();
-      loadPeople();
-      requestGeolocation();
-
-      showToast('Добро пожаловать!', 'success');
-    }
-
-    // Загрузка аватара
-    avatarUploadBig.addEventListener('click', () => {
-      avatarInputRegister.click();
-    });
-
-    avatarInputRegister.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      if (file.size > 5 * 1024 * 1024) {
-        showToast('Фото слишком большое (макс 5MB)', 'error');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const avatarData = event.target.result;
-        state.userProfile.avatar = avatarData;
-        localStorage.setItem('userAvatar', avatarData);
-
-        avatarUploadBig.innerHTML = `<img src="${avatarData}" alt="avatar">`;
-        avatarUploadBig.classList.add('has-photo');
-        showToast('Фото загружено!', 'success');
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Валидация при вводе
-    nicknameInput.addEventListener('input', () => {
-      if (nicknameInput.value.trim().length > 0) {
-        errorText.textContent = '';
-      }
-    });
-
-    // Регистрация
-    registerBtn.addEventListener('click', completeRegistration);
-    nicknameInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') completeRegistration();
-    });
-
-    // Проверка регистрации
-    async function checkRegistration() {
-      const savedUserId = localStorage.getItem('userId');
-      const savedUserName = localStorage.getItem('userName');
-      const savedUserAvatar = localStorage.getItem('userAvatar');
-      const savedUserInit = localStorage.getItem('userInit');
-
-      if (savedUserId && savedUserName) {
-        state.userProfile = {
-          id: savedUserId,
-          name: savedUserName,
-          init: savedUserInit || savedUserName.substring(0, 2).toUpperCase(),
-          avatar: savedUserAvatar || null
-        };
-        state.isRegistered = true;
-
-        // Загружаем профиль из Firebase
-        try {
-          const userDoc = await db.collection('users').doc(savedUserId).get();
-          if (userDoc.exists) {
-            const userData = userDoc.data();
-            state.userProfile.name = userData.name || savedUserName;
-            state.userProfile.avatar = userData.avatar || savedUserAvatar;
-            state.userProfile.init = userData.init || savedUserInit;
-          }
-        } catch (error) {
-          console.error('Error loading user profile:', error);
-        }
-
-        userName.textContent = state.userProfile.name;
-        if (state.userProfile.avatar) {
-          userAvatar.innerHTML = `<img src="${state.userProfile.avatar}" alt="avatar">`;
-        } else {
-          userAvatar.textContent = state.userProfile.init;
-        }
-
-        registerScreen.style.display = 'none';
-        mainScreen.classList.add('active');
-
-        updateStatusUI();
-        loadPeople();
-        requestGeolocation();
-      } else {
-        registerScreen.style.display = 'flex';
-        mainScreen.classList.remove('active');
-        nicknameInput.focus();
-      }
-    }
-
     // Обработчики событий
     freeBtn.addEventListener('click', toggleFree);
-
+    
     moodScroll.addEventListener('click', e => {
       const chip = e.target.closest('.mood-chip');
       if (chip) setMood(chip.dataset.mood);
@@ -1498,27 +891,19 @@
       if (e.key === 'Enter') sendMsg();
     });
 
-    // Статус подключения
-    db.collection('people').doc('_connection_test_').onSnapshot(
-      () => {
-        connectionStatus.textContent = '🟢 Онлайн';
-        connectionStatus.style.color = 'var(--accent-green)';
-      },
-      () => {
-        connectionStatus.textContent = '🟡 Оффлайн';
-        connectionStatus.style.color = 'var(--accent-orange)';
-      }
-    );
+    premiumLink.addEventListener('click', () => showToast('Premium: скоро', 'warning'));
+    $('#radiusPill').addEventListener('click', () => showToast('Радиус: 2 км'));
+    $('#qaNearby').addEventListener('click', () => showToast('Поиск рядом'));
+    $('#qaFriends').addEventListener('click', () => showToast('Друзья'));
+    $('#qaParty').addEventListener('click', () => showToast('Вечеринки скоро'));
+
+    // Запуск
+    updateStatusUI();
+    loadPeople();
 
     // Таймер обновления времени
-    setInterval(async () => {
-      if (!state.isRegistered) return;
-
-      try {
-        const snapshot = await db.collection('people')
-          .where('online', '==', true)
-          .get();
-
+    setInterval(() => {
+      db.collection('people').where('online', '==', true).get().then(snapshot => {
         const batch = db.batch();
         snapshot.forEach(doc => {
           const data = doc.data();
@@ -1526,42 +911,12 @@
             batch.update(doc.ref, { time: data.time - 1 });
           }
           if (data.time <= 1) {
-            batch.update(doc.ref, { 
-              online: false,
-              lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            batch.update(doc.ref, { online: false });
           }
         });
-        await batch.commit();
-      } catch (error) {
-        console.error('Timer update error:', error);
-      }
+        return batch.commit();
+      });
     }, 60000);
-
-    // Очистка старых чатов (старше 24 часов)
-    async function cleanupOldChats() {
-      try {
-        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        const snapshot = await db.collection('chats')
-          .where('lastMessageTime', '<', oneDayAgo)
-          .get();
-
-        const batch = db.batch();
-        snapshot.forEach(doc => {
-          batch.delete(doc.ref);
-        });
-        await batch.commit();
-      } catch (error) {
-        console.error('Cleanup error:', error);
-      }
-    }
-
-    // Запускаем очистку при загрузке и каждые 6 часов
-    cleanupOldChats();
-    setInterval(cleanupOldChats, 6 * 60 * 60 * 1000);
-
-    // Запуск приложения
-    checkRegistration();
   </script>
 </body>
 </html>
