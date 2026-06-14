@@ -6,127 +6,469 @@
   <title>сейчас</title>
   <style>
     :root {
-      --bg: #FAFAFA; --surface: #FFFFFF; --text: #0D0D0D; --text-secondary: #6E6E73;
-      --text-tertiary: #AEAEB2; --accent: #0066FF; --accent-green: #1ED45E;
-      --accent-red: #FF3B30; --accent-orange: #FF9500; --accent-purple: #8B5CF6;
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #0D0D0D;
+      --text-secondary: #6E6E73;
+      --text-tertiary: #AEAEB2;
+      --accent: #0066FF;
+      --accent-green: #1ED45E;
+      --accent-red: #FF3B30;
+      --accent-purple: #8B5CF6;
       --shadow-card: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
       --shadow-button: 0 2px 8px rgba(0,102,255,0.15);
       --shadow-button-green: 0 2px 8px rgba(30,212,94,0.2);
-      --radius-md: 18px; --radius-lg: 24px; --radius-xl: 30px; --radius-full: 9999px;
+      --radius-md: 18px;
+      --radius-lg: 24px;
+      --radius-xl: 30px;
+      --radius-full: 9999px;
       --font: -apple-system, 'SF Pro Display', 'Inter', system-ui, sans-serif;
       --transition: 200ms cubic-bezier(0.32, 0.72, 0, 1);
     }
-    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased; }
-    html,body { height:100%; width:100%; overflow:hidden; font-family:var(--font); background:var(--bg); color:var(--text); display:flex; align-items:center; justify-content:center; }
-    .app { width:100%; height:100%; max-width:430px; max-height:932px; background:var(--bg); display:flex; flex-direction:column; position:relative; overflow:hidden; }
-    @media (min-width:431px) { .app { border-radius:44px; box-shadow:0 30px 80px rgba(0,0,0,0.12); height:92vh; max-height:880px; } }
-    
-    .toast { position:absolute; top:20px; left:50%; transform:translateX(-50%) translateY(-120px); background:var(--text); color:white; padding:12px 22px; border-radius:var(--radius-full); font-size:13px; font-weight:600; z-index:200; pointer-events:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 8px 24px rgba(0,0,0,0.2); white-space:nowrap; }
-    .toast.show { transform:translateX(-50%) translateY(0); }
-    .toast.success { background:var(--accent-green); }
-    
-    .screen { flex:1; overflow-y:auto; overflow-x:hidden; padding:20px 22px 16px; display:flex; flex-direction:column; gap:20px; scroll-behavior:smooth; -webkit-overflow-scrolling:touch; }
-    .screen::-webkit-scrollbar { width:0; }
-    
-    .header { display:flex; align-items:center; justify-content:space-between; padding:0 2px; flex-shrink:0; }
-    .logo-row { display:flex; align-items:center; gap:10px; }
-    .logo { font-size:30px; font-weight:700; letter-spacing:-0.8px; }
-    .logo-dot { display:inline-block; width:5px; height:5px; background:var(--accent); border-radius:50%; margin-left:3px; vertical-align:super; }
-    .live-badge { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; padding:4px 10px; border-radius:var(--radius-full); background:rgba(30,212,94,0.12); color:var(--accent-green); opacity:0; transform:scale(0.8); transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    .live-badge.on { opacity:1; transform:scale(1); }
-    .header-pill { font-size:12px; font-weight:600; padding:7px 15px; border-radius:var(--radius-full); background:var(--surface); color:var(--text-secondary); box-shadow:var(--shadow-card); cursor:pointer; }
-    
-    .status-card { background:var(--surface); border-radius:var(--radius-xl); padding:22px; display:flex; flex-direction:column; gap:18px; box-shadow:var(--shadow-card); transition:all var(--transition); }
-    .status-card.live { background:#F8FFFA; }
-    .status-row { display:flex; align-items:center; gap:12px; }
-    .user-avatar { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:600; color:white; flex-shrink:0; transition:all var(--transition); }
-    .status-info { flex:1; }
-    .status-name { font-weight:600; font-size:16px; letter-spacing:-0.2px; }
-    .status-subtitle { font-size:12px; color:var(--text-tertiary); margin-top:2px; }
-    .status-indicator { width:10px; height:10px; border-radius:50%; background:#D1D1D6; flex-shrink:0; }
-    .status-indicator.live { background:var(--accent-green); box-shadow:0 0 10px rgba(30,212,94,0.4); animation:pulse 2.5s infinite; }
-    @keyframes pulse { 0%,100%{box-shadow:0 0 6px rgba(30,212,94,0.25)} 50%{box-shadow:0 0 16px rgba(30,212,94,0.5)} }
-    
-    .btn-main { width:100%; padding:15px 24px; border-radius:var(--radius-md); font-size:16px; font-weight:600; cursor:pointer; border:none; color:white; background:var(--accent); transition:all var(--transition); display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:var(--shadow-button); }
-    .btn-main:active { transform:scale(0.97); }
-    .btn-main.is-active { background:var(--accent-green); box-shadow:var(--shadow-button-green); }
-    
-    .quick-actions { display:flex; gap:8px; flex-shrink:0; }
-    .quick-action { flex:1; padding:12px; border-radius:var(--radius-lg); background:var(--surface); box-shadow:var(--shadow-card); cursor:pointer; transition:all var(--transition); text-align:center; font-size:13px; font-weight:500; color:var(--text-secondary); }
-    .quick-action:active { transform:scale(0.95); background:#F5F5FA; }
-    
-    .section-label { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--text-tertiary); padding:0 2px; flex-shrink:0; }
-    
-    .mood-scroll { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding:2px 0; flex-shrink:0; }
-    .mood-scroll::-webkit-scrollbar { display:none; }
-    .mood-chip { padding:10px 18px; border-radius:var(--radius-full); font-size:14px; font-weight:500; white-space:nowrap; background:var(--surface); cursor:pointer; transition:all var(--transition); color:var(--text-secondary); box-shadow:var(--shadow-card); }
-    .mood-chip:active { transform:scale(0.94); }
-    .mood-chip.selected { background:var(--text); color:white; font-weight:600; }
-    
-    .people-header { display:flex; align-items:center; justify-content:space-between; padding:0 2px; flex-shrink:0; }
-    .people-title { font-size:20px; font-weight:700; }
-    .people-count { font-size:13px; font-weight:500; color:var(--text-tertiary); }
-    
-    .people-list { display:flex; flex-direction:column; gap:8px; }
-    
-    .person-card { display:flex; align-items:center; gap:14px; background:var(--surface); border-radius:var(--radius-lg); padding:15px 17px; cursor:pointer; transition:all var(--transition); box-shadow:var(--shadow-card); }
-    .person-card:active { transform:scale(0.98); background:#F9F9FC; }
-    .person-card.urgent { border-left:3px solid var(--accent-red); }
-    
-    .person-avatar { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:600; color:white; flex-shrink:0; position:relative; }
-    .online-dot { position:absolute; bottom:1px; right:1px; width:10px; height:10px; background:var(--accent-green); border-radius:50%; border:2px solid white; }
-    
-    .person-info { flex:1; min-width:0; }
-    .person-name-row { display:flex; align-items:center; gap:8px; margin-bottom:3px; }
-    .person-name { font-weight:600; font-size:15px; }
-    .person-tag { font-size:10px; font-weight:600; padding:3px 8px; border-radius:var(--radius-full); text-transform:uppercase; }
-    .person-tag.friend { background:#EEF2FF; color:#4B6BFF; }
-    .person-tag.mutual { background:#F5F0FF; color:var(--accent-purple); }
-    .person-mood { font-size:13px; color:var(--text-tertiary); }
-    .person-distance { font-size:11px; color:var(--text-tertiary); margin-top:2px; }
-    
-    .person-timer { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
-    .timer-value { font-size:12px; font-weight:600; padding:5px 10px; border-radius:var(--radius-full); background:#F5F5FA; color:var(--text-secondary); }
-    .timer-value.critical { background:#FFF0F0; color:var(--accent-red); animation:blink 1.2s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.45} }
-    
-    .empty-state { display:flex; flex-direction:column; align-items:center; padding:48px 20px; text-align:center; gap:10px; }
-    .empty-circle { width:64px; height:64px; border-radius:50%; background:#F5F5FA; display:flex; align-items:center; justify-content:center; margin-bottom:6px; font-size:28px; }
-    .empty-title { font-weight:600; font-size:16px; }
-    .empty-desc { font-size:13px; color:var(--text-tertiary); }
-    
-    .modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.25); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); z-index:100; display:flex; align-items:flex-end; }
-    .chat-sheet { width:100%; background:var(--surface); border-radius:28px 28px 0 0; padding:20px 20px 34px; box-shadow:0 -10px 40px rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:16px; max-height:70%; animation:slideUp 0.3s ease; }
-    @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-    .chat-header { display:flex; align-items:center; justify-content:space-between; }
-    .chat-header-left { display:flex; align-items:center; gap:10px; }
-    .chat-avatar-sm { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; color:white; }
-    .chat-title { font-size:18px; font-weight:700; }
-    .chat-close { width:32px; height:32px; border-radius:50%; background:#F5F5FA; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--text-secondary); }
-    .chat-messages { display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto; }
-    .msg { padding:12px 16px; border-radius:18px; max-width:80%; font-size:14px; line-height:1.45; }
-    .msg.incoming { background:#F5F5FA; align-self:flex-start; border-bottom-left-radius:6px; }
-    .msg.outgoing { background:var(--accent); color:white; align-self:flex-end; border-bottom-right-radius:6px; }
-    .chat-input-row { display:flex; gap:8px; align-items:center; }
-    .chat-input { flex:1; padding:13px 16px; border-radius:var(--radius-full); border:none; background:#F5F5FA; font-size:14px; font-family:var(--font); outline:none; }
-    .chat-input:focus { background:#EEEEF5; }
-    .chat-send { width:42px; height:42px; border-radius:50%; background:var(--accent); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .chat-send:active { transform:scale(0.9); }
-    .chat-send svg { width:18px; height:18px; stroke:white; fill:none; stroke-width:2.5; }
-    
-    .bottom-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 22px 20px; font-size:11px; color:var(--text-tertiary); background:var(--bg); flex-shrink:0; }
-    .bottom-bar .premium { color:var(--accent); font-weight:600; cursor:pointer; }
-    
-    .profile-screen { padding:20px; display:flex; flex-direction:column; gap:20px; }
-    .profile-header { text-align:center; }
-    .profile-avatar { width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:36px; font-weight:700; color:white; margin:0 auto 12px; }
-    .profile-name { font-size:22px; font-weight:700; }
-    .profile-status { font-size:14px; color:var(--text-tertiary); margin-top:4px; }
-    .profile-card { background:var(--surface); border-radius:var(--radius-xl); padding:20px; box-shadow:var(--shadow-card); }
-    .profile-row { display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0F0F5; }
-    .profile-row:last-child { border-bottom:none; }
-    .profile-label { color:var(--text-secondary); }
-    .profile-value { font-weight:500; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      max-width: 430px;
+      max-height: 932px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 431px) {
+      .app {
+        border-radius: 44px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+        height: 92vh;
+        max-height: 880px;
+      }
+    }
+
+    .toast {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-120px);
+      background: var(--text);
+      color: white;
+      padding: 12px 22px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 200;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--accent-green); }
+
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scroll-behavior: smooth;
+    }
+    .screen::-webkit-scrollbar { width: 0; }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+    }
+    .logo-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-left: 3px;
+      vertical-align: super;
+    }
+    .header-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 15px;
+      border-radius: var(--radius-full);
+      background: var(--surface);
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+    }
+    .header-pill:active { background: #F0F0F5; }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: var(--shadow-card);
+      flex-shrink: 0;
+    }
+    .card.green { background: #F8FFFA; }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+    .avatar.lg {
+      width: 80px;
+      height: 80px;
+      font-size: 36px;
+    }
+    .info { flex: 1; }
+    .name { font-weight: 600; font-size: 16px; }
+    .sub { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #D1D1D6;
+      flex-shrink: 0;
+    }
+    .dot.live {
+      background: var(--accent-green);
+      box-shadow: 0 0 10px rgba(30,212,94,0.4);
+      animation: pulse 2.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(30,212,94,0.25); }
+      50% { box-shadow: 0 0 16px rgba(30,212,94,0.5); }
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px 24px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      color: white;
+      background: var(--accent);
+      transition: all var(--transition);
+      box-shadow: var(--shadow-button);
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn.green {
+      background: var(--accent-green);
+      box-shadow: var(--shadow-button-green);
+    }
+    .btn.red { background: var(--accent-red); }
+    .btn.outline {
+      background: transparent;
+      color: var(--accent);
+      box-shadow: none;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 2px 0;
+    }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip {
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      background: var(--surface);
+      cursor: pointer;
+      transition: all var(--transition);
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-card);
+    }
+    .chip:active { transform: scale(0.94); }
+    .chip.selected {
+      background: var(--text);
+      color: white;
+      font-weight: 600;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-tertiary);
+    }
+
+    .people-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .people-title { font-size: 20px; font-weight: 700; }
+    .people-count { font-size: 13px; color: var(--text-tertiary); }
+
+    .people-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 15px 17px;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+    .person:active { transform: scale(0.98); background: #F9F9FC; }
+    .person.urgent { border-left: 3px solid var(--accent-red); }
+
+    .p-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .online-dot {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 10px;
+      height: 10px;
+      background: var(--accent-green);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+
+    .p-info { flex: 1; }
+    .p-name { font-weight: 600; font-size: 15px; }
+    .p-mood { font-size: 13px; color: var(--text-tertiary); }
+    .p-dist { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+    .tag.friend { background: #EEF2FF; color: #4B6BFF; }
+    .tag.mutual { background: #F5F0FF; color: var(--accent-purple); }
+
+    .timer {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: var(--radius-full);
+      background: #F5F5FA;
+      color: var(--text-secondary);
+    }
+    .timer.crit {
+      background: #FFF0F0;
+      color: var(--accent-red);
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-tertiary);
+    }
+
+    .bottom-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 22px 20px;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+    .premium-link {
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Чат */
+    .modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+    }
+    .chat {
+      width: 100%;
+      background: var(--surface);
+      border-radius: 28px 28px 0 0;
+      padding: 20px 20px 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 70%;
+      animation: up 0.3s ease;
+    }
+    @keyframes up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+    }
+    .chat-name { font-size: 18px; font-weight: 700; }
+    .chat-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #F5F5FA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .msg {
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 80%;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .msg.in { background: #F5F5FA; align-self: flex-start; border-bottom-left-radius: 6px; }
+    .msg.out { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 6px; }
+    .chat-row { display: flex; gap: 8px; align-items: center; }
+    .chat-input {
+      flex: 1;
+      padding: 13px 16px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: #F5F5FA;
+      font-size: 14px;
+      font-family: var(--font);
+      outline: none;
+    }
+    .chat-send {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .chat-send svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    /* Профиль */
+    .profile-center {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .color-picker {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .color-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .color-dot.active { border-color: var(--text); }
   </style>
 </head>
 <body>
@@ -153,361 +495,255 @@
 
     const $ = s => document.querySelector(s);
     const root = $('#root');
-    
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-      userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-      localStorage.setItem('userId', userId);
-    }
+    const toast = $('#toast');
 
+    let userId = localStorage.getItem('userId') || 'user_' + Date.now();
+    localStorage.setItem('userId', userId);
     let userName = localStorage.getItem('userName') || 'Гость';
     let userColor = localStorage.getItem('userColor') || '#0066FF';
-    let currentScreen = 'main';
-    let currentMood = 'coffee';
     let isFree = false;
-    let userLocation = { lat: null, lng: null, dist: 'неизвестно' };
+    let currentMood = 'coffee';
+    let userLat = null, userLng = null;
     let toastTimer = null;
 
     const moodNames = { coffee:'Кофе', bar:'Бар', walk:'Прогулка', games:'Настолки', cinema:'Кино', sport:'Спорт' };
-    const avatarColors = ['#0066FF','#1ED45E','#FF3B30','#FF9500','#8B5CF6','#FF2D55','#5856D6','#007AFF'];
+    const colors = ['#0066FF','#1ED45E','#FF3B30','#FF9500','#8B5CF6','#FF2D55','#5856D6','#007AFF'];
 
     function showToast(msg, type='') {
-      const toast = $('#toast');
-      if (!toast) return;
       if (toastTimer) clearTimeout(toastTimer);
       toast.textContent = msg;
       toast.className = `toast ${type}`;
-      requestAnimationFrame(() => {
-        toast.classList.add('show');
-        toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function fmt(m) { return m<60 ? `${m}мин` : `${Math.floor(m/60)}ч ${m%60}м`; }
+
+    function calcDist(lat1,lon1,lat2,lon2) {
+      if (!lat1||!lat2) return '? км';
+      const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLon=(lon2-lon1)*Math.PI/180;
+      const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+      const d=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+      if(d<0.1) return 'рядом';
+      if(d<1) return `${(d*1000).toFixed(0)}м`;
+      return `${d.toFixed(1)}км`;
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(p => {
+        userLat = p.coords.latitude;
+        userLng = p.coords.longitude;
       });
     }
 
-    function formatTime(m) {
-      if (m < 60) return `${m} мин`;
-      const h = Math.floor(m/60);
-      const min = m%60;
-      return min>0 ? `${h}ч ${min}м` : `${h}ч`;
-    }
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-      if (!lat1 || !lat2) return '?';
-      const R = 6371;
-      const dLat = (lat2-lat1)*Math.PI/180;
-      const dLon = (lon2-lon1)*Math.PI/180;
-      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-      const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      const d = R*c;
-      if (d < 0.1) return 'рядом';
-      if (d < 1) return `${(d*1000).toFixed(0)} м`;
-      return `${d.toFixed(1)} км`;
-    }
-
-    function getGeolocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            userLocation.lat = pos.coords.latitude;
-            userLocation.lng = pos.coords.longitude;
-            userLocation.dist = 'здесь';
-            if (isFree) {
-              db.collection('people').doc(userId).update({
-                lat: userLocation.lat,
-                lng: userLocation.lng,
-                dist: userLocation.dist
-              }).catch(()=>{});
-            }
-          },
-          () => showToast('Геолокация недоступна')
-        );
-      }
-    }
-    getGeolocation();
-
-    function renderMainScreen() {
-      currentScreen = 'main';
+    function renderMain() {
       root.innerHTML = `
-        <div class="screen" id="mainScreen">
+        <div class="screen">
           <div class="header">
-            <div class="logo-row">
-              <span class="logo">сейчас<span class="logo-dot"></span></span>
-              <span class="live-badge${isFree?' on':''}" id="liveBadge">LIVE</span>
-            </div>
-            <span class="header-pill" id="profileBtn">${userName.split(' ')[0]}</span>
+            <span class="logo">сейчас<span class="logo-dot"></span></span>
+            <span class="header-pill" id="toProfile">${userName}</span>
           </div>
-          <div class="status-card${isFree?' live':''}" id="statusCard">
-            <div class="status-row">
-              <div class="user-avatar" style="background:${userColor}" id="userAvatar">${userName[0].toUpperCase()}</div>
-              <div class="status-info">
-                <div class="status-name">${userName}</div>
-                <div class="status-subtitle" id="statusText">${isFree?'Доступен':'Не в сети'}</div>
+
+          <div class="card${isFree?' green':''}" id="statusCard">
+            <div class="row">
+              <div class="avatar" style="background:${userColor}">${userName[0].toUpperCase()}</div>
+              <div class="info">
+                <div class="name">${userName}</div>
+                <div class="sub">${isFree?'Доступен':'Не в сети'}</div>
               </div>
-              <div class="status-indicator${isFree?' live':''}" id="statusDot"></div>
+              <div class="dot${isFree?' live':''}"></div>
             </div>
-            <button class="btn-main${isFree?' is-active':''}" id="freeBtn">
-              <span id="freeBtnText">${isFree?'Завершить':'Стать доступным'}</span>
-            </button>
+            <button class="btn${isFree?' green':''}" id="toggleFree">${isFree?'Завершить':'Стать доступным'}</button>
           </div>
-          <div class="quick-actions">
-            <div class="quick-action" id="qaNearby">Рядом</div>
-            <div class="quick-action" id="qaFriends">Друзья</div>
-            <div class="quick-action" id="qaParty">Вечеринки</div>
+
+          <div class="section-title">Настроение</div>
+          <div class="chips" id="moodChips">
+            ${Object.entries(moodNames).map(([k,v])=>`<div class="chip${currentMood===k?' selected':''}" data-mood="${k}">${v}</div>`).join('')}
           </div>
-          <div class="section-label">Настроение</div>
-          <div class="mood-scroll" id="moodScroll">
-            ${Object.entries(moodNames).map(([k,v]) => 
-              `<div class="mood-chip${currentMood===k?' selected':''}" data-mood="${k}">${v}</div>`
-            ).join('')}
-          </div>
+
           <div class="people-header">
             <span class="people-title">Рядом</span>
-            <span class="people-count" id="peopleCount">0 человек</span>
+            <span class="people-count" id="count">0 человек</span>
           </div>
-          <div class="people-list" id="peopleList"></div>
-          <div class="empty-state" id="emptyState" style="display:none;">
-            <div class="empty-circle">—</div>
-            <div class="empty-title">Никого поблизости</div>
-            <div class="empty-desc">Смените настроение или расширьте радиус</div>
-          </div>
+          <div class="people-list" id="list"></div>
+          <div class="empty" id="empty">Никого поблизости</div>
         </div>
         <div class="bottom-bar">
           <span>Чаты живут 24 часа</span>
-          <span class="premium" id="premiumLink">Premium</span>
+          <span class="premium-link" id="premiumBtn">Premium</span>
         </div>
       `;
 
-      document.getElementById('profileBtn').addEventListener('click', renderProfile);
-      document.getElementById('freeBtn').addEventListener('click', toggleFree);
-      document.getElementById('moodScroll').addEventListener('click', e => {
-        const chip = e.target.closest('.mood-chip');
-        if (chip) setMood(chip.dataset.mood);
+      document.getElementById('toProfile').addEventListener('click', renderProfile);
+      document.getElementById('toggleFree').addEventListener('click', toggleFree);
+      document.getElementById('premiumBtn').addEventListener('click', ()=>showToast('Premium','success'));
+      document.getElementById('moodChips').addEventListener('click', e => {
+        const c = e.target.closest('.chip');
+        if (c) { currentMood = c.dataset.mood; renderMain(); if(isFree) updateMyMood(); }
       });
-      document.getElementById('qaNearby').addEventListener('click', ()=>showToast('Поиск поблизости'));
-      document.getElementById('qaFriends').addEventListener('click', ()=>showToast('Только друзья'));
-      document.getElementById('qaParty').addEventListener('click', ()=>showToast('Вечеринки скоро'));
-      document.getElementById('premiumLink').addEventListener('click', ()=>showToast('Premium','success'));
-
       loadPeople();
     }
 
-    function renderProfile() {
-      currentScreen = 'profile';
-      db.collection('people').doc(userId).get().then(doc => {
-        const data = doc.exists ? doc.data() : {};
-        const stats = {
-          total: 0,
-          today: Math.floor(Math.random()*10)
-        };
-        
-        root.innerHTML = `
-          <div class="screen">
-            <div class="header">
-              <span class="logo" style="cursor:pointer" id="backBtn">← Назад</span>
-              <span class="header-pill">Профиль</span>
-            </div>
-            <div class="profile-screen">
-              <div class="profile-header">
-                <div class="profile-avatar" style="background:${userColor}">${userName[0].toUpperCase()}</div>
-                <div class="profile-name">${userName}</div>
-                <div class="profile-status">${isFree?'В эфире':'Не в сети'} · ${userLocation.dist}</div>
-              </div>
-              <div class="profile-card">
-                <div class="profile-row">
-                  <span class="profile-label">Имя</span>
-                  <span class="profile-value" id="profileName">${userName}</span>
-                </div>
-                <div class="profile-row">
-                  <span class="profile-label">Цвет аватара</span>
-                  <div style="display:flex;gap:6px;flex-wrap:wrap;max-width:200px">
-                    ${avatarColors.map(c => `<div style="width:24px;height:24px;border-radius:50%;background:${c};cursor:pointer;border:2px solid ${c===userColor?'var(--text)':'transparent'}" onclick="changeColor('${c}')"></div>`).join('')}
-                  </div>
-                </div>
-                <div class="profile-row">
-                  <span class="profile-label">Встреч сегодня</span>
-                  <span class="profile-value">${stats.today}</span>
-                </div>
-                <div class="profile-row">
-                  <span class="profile-label">Настроение</span>
-                  <span class="profile-value">${moodNames[currentMood]}</span>
-                </div>
-              </div>
-              <button class="btn-main" id="editNameBtn">Изменить имя</button>
-              <button class="btn-main" style="background:var(--accent-red)" id="logoutBtn">Выйти</button>
-            </div>
-          </div>
-        `;
-
-        document.getElementById('backBtn').addEventListener('click', renderMainScreen);
-        document.getElementById('editNameBtn').addEventListener('click', () => {
-          const name = prompt('Введите имя:', userName);
-          if (name && name.trim()) {
-            userName = name.trim();
-            localStorage.setItem('userName', userName);
-            renderProfile();
-          }
-        });
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-          if (isFree) db.collection('people').doc(userId).delete();
-          localStorage.clear();
-          location.reload();
-        });
-        window.changeColor = (color) => {
-          userColor = color;
-          localStorage.setItem('userColor', color);
-          renderProfile();
-        };
-      });
-    }
-
     function loadPeople() {
-      db.collection('people')
-        .where('mood','==',currentMood)
-        .where('online','==',true)
-        .onSnapshot(snapshot => {
-          const list = document.getElementById('peopleList');
-          const empty = document.getElementById('emptyState');
-          const count = document.getElementById('peopleCount');
-          if (!list) return;
-          
-          list.innerHTML = '';
-          const people = [];
-          snapshot.forEach(doc => {
-            if (doc.id !== userId) people.push({id:doc.id, ...doc.data()});
+      db.collection('people').where('mood','==',currentMood).where('online','==',true).onSnapshot(snap => {
+        const list = document.getElementById('list');
+        const empty = document.getElementById('empty');
+        const count = document.getElementById('count');
+        if (!list) return;
+        list.innerHTML = '';
+        const arr = [];
+        snap.forEach(d => { if (d.id!==userId) arr.push({id:d.id,...d.data()}); });
+        if (arr.length===0) { empty.style.display='block'; count.textContent='0 человек'; }
+        else {
+          empty.style.display='none';
+          count.textContent = arr.length + ' чел.';
+          arr.forEach(p => {
+            const dist = calcDist(userLat,userLng,p.lat,p.lng);
+            const u = p.time<15;
+            const el = document.createElement('div');
+            el.className = `person${u?' urgent':''}`;
+            el.innerHTML = `
+              <div class="p-avatar" style="background:${p.color||'#8B5CF6'}">${p.init}<span class="online-dot"></span></div>
+              <div class="p-info">
+                <div class="p-name">${p.name} <span class="tag ${p.rel==='friend'?'friend':'mutual'}">${p.rel==='friend'?'друг':'общий'}</span></div>
+                <div class="p-mood">${moodNames[p.mood]}</div>
+                <div class="p-dist">${dist}</div>
+              </div>
+              <div class="timer${u?' crit':''}">${fmt(p.time)}</div>`;
+            el.addEventListener('click', ()=>openChat(p));
+            list.appendChild(el);
           });
-
-          if (people.length === 0) {
-            empty.style.display = 'flex';
-            count.textContent = '0 человек';
-          } else {
-            empty.style.display = 'none';
-            count.textContent = `${people.length} чел.`;
-            people.forEach((p,i) => {
-              const dist = getDistance(userLocation.lat, userLocation.lng, p.lat, p.lng);
-              const urgent = p.time < 15;
-              const card = document.createElement('div');
-              card.className = `person-card${urgent?' urgent':''}`;
-              card.innerHTML = `
-                <div class="person-avatar" style="background:${p.color||'#8B5CF6'}">${p.init}</div>
-                <div class="person-info">
-                  <div class="person-name-row">
-                    <span class="person-name">${p.name}</span>
-                    <span class="person-tag ${p.rel==='friend'?'friend':'mutual'}">${p.rel==='friend'?'друг':'общий'}</span>
-                  </div>
-                  <div class="person-mood">${moodNames[p.mood]}</div>
-                  <div class="person-distance">${dist}</div>
-                </div>
-                <div class="person-timer">
-                  <span class="timer-value${urgent?' critical':''}">${formatTime(p.time)}</span>
-                </div>`;
-              card.addEventListener('click', ()=>openChat(p));
-              list.appendChild(card);
-            });
-          }
-        });
+        }
+      });
     }
 
     function toggleFree() {
       isFree = !isFree;
       if (isFree) {
         db.collection('people').doc(userId).set({
-          name: userName,
-          init: userName[0].toUpperCase(),
-          mood: currentMood,
-          rel: 'friend',
-          time: 1440,
-          online: true,
-          lat: userLocation.lat,
-          lng: userLocation.lng,
-          dist: userLocation.dist,
-          color: userColor
+          name:userName, init:userName[0].toUpperCase(), mood:currentMood,
+          rel:'friend', time:1440, online:true, lat:userLat, lng:userLng, color:userColor
         });
-        showToast('Вы в эфире!','success');
+        showToast('Вы в эфире','success');
       } else {
         db.collection('people').doc(userId).delete();
         showToast('Вы не в сети');
       }
-      renderMainScreen();
+      renderMain();
     }
 
-    function setMood(mood) {
-      currentMood = mood;
-      if (isFree) {
-        db.collection('people').doc(userId).update({mood});
-      }
-      renderMainScreen();
+    function updateMyMood() {
+      if (isFree) db.collection('people').doc(userId).update({mood:currentMood});
     }
 
     function openChat(person) {
       const chatId = [userId, person.id].sort().join('_');
-      
       root.innerHTML = `
-        <div class="modal-backdrop" id="chatModal" style="display:flex;">
-          <div class="chat-sheet">
+        <div class="modal" id="chatModal">
+          <div class="chat">
             <div class="chat-header">
-              <div class="chat-header-left">
-                <div class="chat-avatar-sm" style="background:${person.color||'#8B5CF6'}">${person.init}</div>
-                <div><div class="chat-title">${person.name}</div></div>
+              <div class="row">
+                <div class="chat-avatar" style="background:${person.color||'#8B5CF6'}">${person.init}</div>
+                <span class="chat-name">${person.name}</span>
               </div>
-              <div class="chat-close" id="chatClose">✕</div>
+              <div class="chat-close" id="closeChat">x</div>
             </div>
-            <div class="chat-messages" id="chatMessages"></div>
-            <div class="chat-input-row">
-              <input class="chat-input" id="chatInput" placeholder="Сообщение...">
-              <button class="chat-send" id="chatSend">
+            <div class="messages" id="messages"></div>
+            <div class="chat-row">
+              <input class="chat-input" id="msgInput" placeholder="Сообщение...">
+              <button class="chat-send" id="sendBtn">
                 <svg viewBox="0 0 20 20"><line x1="5" y1="10" x2="15" y2="10"/><polyline points="10 5 15 10 10 15"/></svg>
               </button>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
 
-      const messagesDiv = document.getElementById('chatMessages');
-      
-      db.collection('messages')
-        .where('chatId','==',chatId)
-        .orderBy('timestamp')
-        .onSnapshot(snapshot => {
-          messagesDiv.innerHTML = '';
-          snapshot.forEach(doc => {
-            const m = doc.data();
-            messagesDiv.innerHTML += `<div class="msg ${m.from===userId?'outgoing':'incoming'}">${m.text}</div>`;
-          });
-          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      const msgDiv = document.getElementById('messages');
+      db.collection('messages').where('chatId','==',chatId).orderBy('time').onSnapshot(snap => {
+        msgDiv.innerHTML = '';
+        snap.forEach(d => {
+          const m = d.data();
+          msgDiv.innerHTML += `<div class="msg ${m.from===userId?'out':'in'}">${m.text}</div>`;
         });
-
-      document.getElementById('chatClose').addEventListener('click', ()=>{
-        document.getElementById('chatModal').remove();
-        renderMainScreen();
+        msgDiv.scrollTop = msgDiv.scrollHeight;
       });
 
-      document.getElementById('chatSend').addEventListener('click', ()=>{
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-        db.collection('messages').add({
-          chatId,
-          from: userId,
-          text,
-          timestamp: Date.now()
-        });
-        input.value = '';
+      document.getElementById('closeChat').addEventListener('click', renderMain);
+      document.getElementById('sendBtn').addEventListener('click', ()=>{
+        const inp = document.getElementById('msgInput');
+        const t = inp.value.trim();
+        if (!t) return;
+        db.collection('messages').add({chatId, from:userId, text:t, time:Date.now()});
+        inp.value = '';
       });
-
-      document.getElementById('chatInput').addEventListener('keypress', e => {
-        if (e.key==='Enter') document.getElementById('chatSend').click();
+      document.getElementById('msgInput').addEventListener('keypress', e => {
+        if (e.key==='Enter') document.getElementById('sendBtn').click();
       });
     }
 
-    // Запуск
-    renderMainScreen();
+    function renderProfile() {
+      root.innerHTML = `
+        <div class="screen">
+          <div class="header">
+            <span class="logo" id="backBtn" style="cursor:pointer">Назад</span>
+            <span class="header-pill">Профиль</span>
+          </div>
+          <div class="profile-center">
+            <div class="avatar lg" style="background:${userColor};margin:0 auto">${userName[0].toUpperCase()}</div>
+            <div class="name" style="margin-top:12px">${userName}</div>
+            <div class="sub">${isFree?'В эфире':'Не в сети'}</div>
+          </div>
+          <div class="card">
+            <div class="row" style="justify-content:space-between">
+              <span class="name">Имя</span>
+              <span style="color:var(--text-secondary)">${userName}</span>
+            </div>
+            <div class="row" style="justify-content:space-between">
+              <span class="name">Цвет</span>
+              <div class="color-picker">
+                ${colors.map(c=>`<div class="color-dot${c===userColor?' active':''}" style="background:${c}" onclick="changeColor('${c}')"></div>`).join('')}
+              </div>
+            </div>
+          </div>
+          <button class="btn outline" id="renameBtn">Изменить имя</button>
+          <button class="btn red" id="resetBtn">Сбросить данные</button>
+        </div>
+      `;
 
-    // Таймер
+      document.getElementById('backBtn').addEventListener('click', renderMain);
+      document.getElementById('renameBtn').addEventListener('click', ()=>{
+        const n = prompt('Новое имя:', userName);
+        if (n && n.trim()) {
+          userName = n.trim();
+          localStorage.setItem('userName', userName);
+          if (isFree) db.collection('people').doc(userId).update({name:userName, init:userName[0].toUpperCase()});
+          renderProfile();
+        }
+      });
+      document.getElementById('resetBtn').addEventListener('click', ()=>{
+        if (confirm('Сбросить все данные?')) {
+          localStorage.clear();
+          location.reload();
+        }
+      });
+      window.changeColor = (c) => {
+        userColor = c;
+        localStorage.setItem('userColor', c);
+        if (isFree) db.collection('people').doc(userId).update({color:c});
+        renderProfile();
+      };
+    }
+
+    // Старт
+    renderMain();
+
+    // Таймер очистки
     setInterval(() => {
-      db.collection('people').where('online','==',true).get().then(snapshot => {
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          if (d.time > 0) db.collection('people').doc(doc.id).update({time: d.time-1});
-          if (d.time <= 1) db.collection('people').doc(doc.id).update({online: false});
+      db.collection('people').where('online','==',true).get().then(s => {
+        s.forEach(d => {
+          const p = d.data();
+          if (p.time>0) db.collection('people').doc(d.id).update({time:p.time-1});
+          if (p.time<=1) db.collection('people').doc(d.id).update({online:false});
         });
       });
     }, 60000);
