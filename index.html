@@ -43,6 +43,7 @@
       overflow: hidden;
       font-family: var(--font);
       background: var(--bg);
+      color: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -624,7 +625,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // Firebase конфигурация
+    // Ваша база данных Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDbqMxqr3nDVmJuQx5lz4QEpbTKMjnizy0",
       authDomain: "antinet-e00ae.firebaseapp.com",
@@ -793,32 +794,12 @@
       }
     }
 
-    // Чат через Firebase
-    function getChatId(personId) {
-      const ids = [userId, personId].sort();
-      return `chat_${ids[0]}_${ids[1]}`;
-    }
-
     function openChat(person) {
       state.chat = person;
-      const chatId = getChatId(person.id);
-      
+      state.messages = [];
       chatTitle.textContent = person.name;
       chatAvatar.textContent = person.init;
-
-      // Загружаем сообщения из Firebase
-      db.collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('timestamp', 'asc')
-        .onSnapshot(snapshot => {
-          state.messages = [];
-          snapshot.forEach(doc => {
-            state.messages.push({ id: doc.id, ...doc.data() });
-          });
-          renderChat();
-        });
-
+      renderChat();
       chatModal.style.display = 'flex';
       mainContent.style.overflow = 'hidden';
       setTimeout(() => chatInput.focus(), 200);
@@ -827,50 +808,31 @@
     function closeChatFn() {
       chatModal.style.display = 'none';
       state.chat = null;
-      state.messages = [];
       mainContent.style.overflow = '';
     }
 
-    async function sendMsg() {
+    function sendMsg() {
       const text = chatInput.value.trim();
       if (!text || !state.chat) return;
       
-      const chatId = getChatId(state.chat.id);
-      
-      // Сохраняем сообщение в Firebase
-      await db.collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .add({
-          text,
-          senderId: userId,
-          type: 'outgoing',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      
+      state.messages.push({ text, type: 'outgoing' });
       chatInput.value = '';
       renderChat();
       
-      // Автоответ через Firebase
-      setTimeout(async () => {
+      setTimeout(() => {
         const replies = ['Отлично!', 'Буду через 15 мин', 'Договорились!', 'Жду'];
-        await db.collection('chats')
-          .doc(chatId)
-          .collection('messages')
-          .add({
-            text: replies[Math.floor(Math.random() * replies.length)],
-            senderId: state.chat.id,
-            type: 'incoming',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
+        state.messages.push({ 
+          text: replies[Math.floor(Math.random() * replies.length)], 
+          type: 'incoming' 
+        });
+        renderChat();
       }, 1000);
     }
 
     function renderChat() {
-      chatMessages.innerHTML = state.messages.map(m => {
-        const isOutgoing = m.senderId === userId;
-        return `<div class="msg ${isOutgoing ? 'outgoing' : 'incoming'}">${m.text}</div>`;
-      }).join('');
+      chatMessages.innerHTML = state.messages.map(m => 
+        `<div class="msg ${m.type==='incoming'?'incoming':'outgoing'}">${m.text}</div>`
+      ).join('');
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
@@ -901,20 +863,18 @@
     updateStatusUI();
     loadPeople();
 
-    // Таймер обновления времени
+    // Таймер
     setInterval(() => {
       db.collection('people').where('online', '==', true).get().then(snapshot => {
-        const batch = db.batch();
         snapshot.forEach(doc => {
           const data = doc.data();
           if (data.time > 0) {
-            batch.update(doc.ref, { time: data.time - 1 });
+            db.collection('people').doc(doc.id).update({ time: data.time - 1 });
           }
           if (data.time <= 1) {
-            batch.update(doc.ref, { online: false });
+            db.collection('people').doc(doc.id).update({ online: false });
           }
         });
-        return batch.commit();
       });
     }, 60000);
   </script>
