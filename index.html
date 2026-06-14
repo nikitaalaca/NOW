@@ -6,1001 +6,344 @@
   <title>сейчас — анти-соцсеть</title>
   <style>
     :root {
-      --bg: #FAFAFA;
-      --surface: #FFFFFF;
-      --text: #0D0D0D;
-      --text-secondary: #6E6E73;
-      --text-tertiary: #AEAEB2;
-      --accent: #0066FF;
-      --accent-green: #1ED45E;
-      --accent-red: #FF3B30;
-      --accent-orange: #FF9500;
-      --accent-purple: #8B5CF6;
-      --shadow-card: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
-      --shadow-button: 0 2px 8px rgba(0,102,255,0.15);
-      --shadow-button-green: 0 2px 8px rgba(30,212,94,0.2);
-      --radius-md: 18px;
-      --radius-lg: 24px;
-      --radius-xl: 30px;
-      --radius-full: 9999px;
-      --font: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Inter', system-ui, sans-serif;
-      --transition: 200ms cubic-bezier(0.32, 0.72, 0, 1);
+      --bg:#FAFAFA; --surface:#FFF; --text:#0D0D0D; --text2:#6E6E73; --text3:#AEAEB2;
+      --accent:#0066FF; --green:#1ED45E; --red:#FF3B30;
+      --shadow:0 1px 3px rgba(0,0,0,0.02),0 4px 12px rgba(0,0,0,0.03);
+      --r:18px; --r2:24px; --r3:30px; --rf:999px;
+      --font:-apple-system,'SF Pro Display','Inter',sans-serif;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .app {
-      width: 100%;
-      height: 100%;
-      max-width: 430px;
-      max-height: 932px;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @media (min-width: 431px) {
-      .app {
-        border-radius: 44px;
-        box-shadow: 0 30px 80px rgba(0,0,0,0.12);
-        height: 92vh;
-        max-height: 880px;
-      }
-    }
-
-    .toast {
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-120px);
-      background: var(--text);
-      color: white;
-      padding: 12px 22px;
-      border-radius: var(--radius-full);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: -0.1px;
-      z-index: 200;
-      pointer-events: none;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-      white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.success { background: var(--accent-green); }
-    .toast.warning { background: var(--accent-orange); }
-
-    .content {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 20px 22px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-    }
-    .content::-webkit-scrollbar { width: 0; }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2px;
-      flex-shrink: 0;
-    }
-    .logo-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo {
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: -0.8px;
-      color: var(--text);
-    }
-    .logo-dot {
-      display: inline-block;
-      width: 5px; height: 5px;
-      background: var(--accent);
-      border-radius: 50%;
-      margin-left: 3px;
-      vertical-align: super;
-    }
-    .live-badge {
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 4px 10px;
-      border-radius: var(--radius-full);
-      background: rgba(30,212,94,0.12);
-      color: var(--accent-green);
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .live-badge.visible { opacity: 1; transform: scale(1); }
-    .header-pill {
-      font-size: 12px; font-weight: 600;
-      padding: 7px 15px;
-      border-radius: var(--radius-full);
-      background: var(--surface);
-      color: var(--text-secondary);
-      letter-spacing: 0.1px;
-      box-shadow: var(--shadow-card);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .header-pill:active { background: #F0F0F5; }
-
-    .status-card {
-      background: var(--surface);
-      border-radius: var(--radius-xl);
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      box-shadow: var(--shadow-card);
-      transition: all var(--transition);
-      flex-shrink: 0;
-    }
-    .status-card.live { background: #F8FFFA; }
-    .status-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .user-avatar {
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 19px; font-weight: 600;
-      color: var(--text-secondary);
-      flex-shrink: 0;
-      transition: all var(--transition);
-    }
-    .status-card.live .user-avatar { background: #E8F8EC; color: var(--accent-green); }
-    .status-info { flex: 1; }
-    .status-name { font-weight: 600; font-size: 16px; letter-spacing: -0.2px; }
-    .status-subtitle { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; transition: all var(--transition); }
-    .status-indicator {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #D1D1D6;
-      transition: all var(--transition);
-      flex-shrink: 0;
-    }
-    .status-indicator.live {
-      background: var(--accent-green);
-      box-shadow: 0 0 10px rgba(30,212,94,0.4);
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 6px rgba(30,212,94,0.25); }
-      50% { box-shadow: 0 0 16px rgba(30,212,94,0.5); }
-    }
-
-    .btn-main {
-      width: 100%;
-      padding: 15px 24px;
-      border-radius: var(--radius-md);
-      font-size: 16px; font-weight: 600;
-      letter-spacing: -0.2px;
-      cursor: pointer;
-      border: none;
-      color: white;
-      background: var(--accent);
-      transition: all var(--transition);
-      display: flex; align-items: center; justify-content: center;
-      gap: 8px;
-      box-shadow: var(--shadow-button);
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-main::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
-      border-radius: var(--radius-md);
-      pointer-events: none;
-    }
-    .btn-main:active { transform: scale(0.97); background: #0055DD; }
-    .btn-main.is-active { background: var(--accent-green); box-shadow: var(--shadow-button-green); }
-    .btn-main.is-active:active { background: #18B84E; }
-    .btn-icon { width: 18px; height: 18px; flex-shrink: 0; }
-
-    .quick-actions {
-      display: flex; gap: 8px; flex-shrink: 0;
-    }
-    .quick-action {
-      flex: 1; padding: 12px;
-      border-radius: var(--radius-lg);
-      background: var(--surface);
-      box-shadow: var(--shadow-card);
-      cursor: pointer;
-      transition: all var(--transition);
-      text-align: center;
-      font-size: 13px; font-weight: 500;
-      color: var(--text-secondary);
-      letter-spacing: -0.1px;
-    }
-    .quick-action:active { transform: scale(0.95); background: #F5F5FA; }
-
-    .section-label {
-      font-size: 12px; font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text-tertiary);
-      padding: 0 2px;
-      flex-shrink: 0;
-    }
-
-    .mood-scroll {
-      display: flex; gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 2px 0;
-      flex-shrink: 0;
-    }
-    .mood-scroll::-webkit-scrollbar { display: none; }
-    .mood-chip {
-      padding: 10px 18px;
-      border-radius: var(--radius-full);
-      font-size: 14px; font-weight: 500;
-      white-space: nowrap;
-      background: var(--surface);
-      cursor: pointer;
-      transition: all var(--transition);
-      color: var(--text-secondary);
-      letter-spacing: -0.1px;
-      box-shadow: var(--shadow-card);
-      flex-shrink: 0;
-    }
-    .mood-chip:active { transform: scale(0.94); }
-    .mood-chip.selected {
-      background: var(--text); color: white;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-    }
-
-    .people-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2px; flex-shrink: 0;
-    }
-    .people-title { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; }
-    .people-count { font-size: 13px; font-weight: 500; color: var(--text-tertiary); }
-
-    .people-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-
-    .person-card {
-      display: flex; align-items: center; gap: 14px;
-      background: var(--surface);
-      border-radius: var(--radius-lg);
-      padding: 15px 17px;
-      cursor: pointer;
-      transition: all var(--transition);
-      box-shadow: var(--shadow-card);
-      position: relative;
-    }
-    .person-card:active { transform: scale(0.98); background: #F9F9FC; }
-    .person-card.urgent { border-left: 3px solid var(--accent-red); }
-
-    .person-avatar {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 19px; font-weight: 600;
-      color: var(--text-secondary);
-      flex-shrink: 0;
-      position: relative;
-    }
-    .person-avatar .online-dot {
-      position: absolute; bottom: 1px; right: 1px;
-      width: 10px; height: 10px;
-      background: var(--accent-green);
-      border-radius: 50%;
-      border: 2px solid white;
-    }
-
-    .person-info { flex: 1; min-width: 0; }
-    .person-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-    .person-name { font-weight: 600; font-size: 15px; letter-spacing: -0.2px; }
-    .person-tag {
-      font-size: 10px; font-weight: 600;
-      padding: 3px 8px;
-      border-radius: var(--radius-full);
-      letter-spacing: 0.2px;
-      text-transform: uppercase;
-    }
-    .person-tag.friend { background: #EEF2FF; color: #4B6BFF; }
-    .person-tag.mutual { background: #F5F0FF; color: var(--accent-purple); }
-    .person-mood { font-size: 13px; color: var(--text-tertiary); }
-    .person-distance { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
-
-    .person-timer {
-      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-      flex-shrink: 0;
-    }
-    .timer-value {
-      font-size: 12px; font-weight: 600;
-      padding: 5px 10px;
-      border-radius: var(--radius-full);
-      background: #F5F5FA;
-      color: var(--text-secondary);
-    }
-    .timer-value.critical {
-      background: #FFF0F0; color: var(--accent-red);
-      animation: blink 1.2s ease-in-out infinite;
-    }
-    @keyframes blink {
-      0%,100% { opacity: 1; }
-      50% { opacity: 0.45; }
-    }
-
-    .empty-state {
-      display: flex; flex-direction: column; align-items: center;
-      padding: 48px 20px; text-align: center; gap: 10px;
-    }
-    .empty-circle {
-      width: 64px; height: 64px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 6px;
-    }
-    .empty-circle svg { width: 26px; height: 26px; stroke: var(--text-tertiary); fill: none; stroke-width: 1.5; }
-    .empty-title { font-weight: 600; font-size: 16px; }
-    .empty-desc { font-size: 13px; color: var(--text-tertiary); max-width: 220px; line-height: 1.5; }
-
-    .modal-backdrop {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 100;
-      display: flex; align-items: flex-end;
-    }
-    .chat-sheet {
-      width: 100%;
-      background: var(--surface);
-      border-radius: 28px 28px 0 0;
-      padding: 20px 20px 34px;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
-      display: flex; flex-direction: column; gap: 16px;
-      max-height: 70%;
-    }
-    .chat-header { display: flex; align-items: center; justify-content: space-between; }
-    .chat-header-left { display: flex; align-items: center; gap: 10px; }
-    .chat-avatar-sm {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 600;
-    }
-    .chat-title { font-size: 18px; font-weight: 700; }
-    .chat-subtitle { font-size: 11px; color: var(--accent-green); font-weight: 500; }
-    .chat-close {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: #F5F5FA;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 16px; color: var(--text-secondary);
-    }
-    .chat-close:active { background: #E8E8F0; transform: scale(0.9); }
-    .chat-messages { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
-    .msg {
-      padding: 12px 16px;
-      border-radius: 18px;
-      max-width: 80%;
-      font-size: 14px; line-height: 1.45;
-    }
-    .msg.incoming { background: #F5F5FA; align-self: flex-start; border-bottom-left-radius: 6px; }
-    .msg.outgoing { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 6px; }
-    .chat-input-row { display: flex; gap: 8px; align-items: center; }
-    .chat-input {
-      flex: 1; padding: 13px 16px;
-      border-radius: var(--radius-full);
-      border: none;
-      background: #F5F5FA;
-      font-size: 14px; font-family: var(--font);
-      outline: none;
-    }
-    .chat-input:focus { background: #EEEEF5; }
-    .chat-send {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .chat-send:active { transform: scale(0.9); background: #0055DD; }
-    .chat-send svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2.5; }
-
-    .bottom-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 22px 20px;
-      font-size: 11px; color: var(--text-tertiary);
-      background: var(--bg);
-      flex-shrink: 0;
-    }
-    .bottom-bar .premium {
-      color: var(--accent); font-weight: 600; cursor: pointer;
-    }
-    .bottom-bar .premium:active { opacity: 0.6; }
-
-    .connection-status {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      z-index: 150;
-      pointer-events: none;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+    html,body{height:100%;width:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center}
+    .app{width:100%;height:100%;max-width:430px;max-height:932px;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden}
+    @media(min-width:431px){.app{border-radius:44px;box-shadow:0 30px 80px rgba(0,0,0,0.12);height:92vh;max-height:880px}}
+    
+    .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 22px;display:flex;flex-direction:column;gap:20px}
+    .screen::-webkit-scrollbar{width:0}
+    
+    .center{text-align:center;padding:50px 0 20px}
+    .logo{font-size:42px;font-weight:700;letter-spacing:-1px}
+    .dot{display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-left:4px;vertical-align:super}
+    .subtitle{font-size:14px;color:var(--text3);margin-top:8px}
+    
+    .card{background:var(--surface);border-radius:var(--r3);padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow)}
+    .label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3)}
+    .input{padding:14px 16px;border-radius:var(--r);border:none;background:#F5F5FA;font-size:15px;font-family:var(--font);outline:none}
+    .input:focus{background:#EEEEF5}
+    .btn{width:100%;padding:15px 24px;border-radius:var(--r);font-size:16px;font-weight:600;cursor:pointer;border:none;color:#fff;background:var(--accent);transition:0.2s}
+    .btn:active{transform:scale(0.97)}
+    .btn.green{background:var(--green)}
+    .link{text-align:center;font-size:13px;color:var(--accent);cursor:pointer;margin-top:8px}
+    .error{color:var(--red);font-size:13px;text-align:center}
+    
+    .header{display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+    .logo-sm{font-size:30px;font-weight:700}
+    .pill{font-size:12px;font-weight:600;padding:7px 15px;border-radius:var(--rf);background:var(--surface);color:var(--text2);box-shadow:var(--shadow);cursor:pointer}
+    
+    .status-card{background:var(--surface);border-radius:var(--r3);padding:22px;display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow)}
+    .status-card.live{background:#F8FFFA}
+    .row{display:flex;align-items:center;gap:12px}
+    .avatar{width:46px;height:46px;border-radius:50%;background:#F5F5FA;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;color:var(--text2)}
+    .info{flex:1}
+    .name{font-weight:600;font-size:16px}
+    .stat{font-size:12px;color:var(--text3);margin-top:2px}
+    .ind{width:10px;height:10px;border-radius:50%;background:#D1D1D6}
+    .ind.on{background:var(--green);box-shadow:0 0 10px rgba(30,212,94,0.4);animation:pulse 2.5s infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 6px rgba(30,212,94,0.25)}50%{box-shadow:0 0 16px rgba(30,212,94,0.5)}}
+    
+    .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+    .chips::-webkit-scrollbar{display:none}
+    .chip{padding:10px 18px;border-radius:var(--rf);font-size:14px;font-weight:500;white-space:nowrap;background:var(--surface);cursor:pointer;color:var(--text2);box-shadow:var(--shadow)}
+    .chip.sel{background:var(--text);color:#fff;font-weight:600}
+    
+    .list{display:flex;flex-direction:column;gap:8px}
+    .person{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:var(--r2);padding:15px 17px;cursor:pointer;box-shadow:var(--shadow)}
+    .person:active{transform:scale(0.98)}
+    .p-avatar{width:48px;height:48px;border-radius:50%;background:#F5F5FA;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:600;color:var(--text2);position:relative}
+    .online{position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid #fff}
+    .p-info{flex:1}
+    .p-name{font-weight:600;font-size:15px}
+    .p-mood{font-size:13px;color:var(--text3)}
+    .tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:var(--rf);text-transform:uppercase}
+    .tag.friend{background:#EEF2FF;color:#4B6BFF}
+    .tag.mutual{background:#F5F0FF;color:#8B5CF6}
+    .timer{font-size:12px;font-weight:600;padding:5px 10px;border-radius:var(--rf);background:#F5F5FA}
+    .timer.crit{background:#FFF0F0;color:var(--red);animation:blink 1.2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.45}}
+    
+    .empty{text-align:center;padding:40px;color:var(--text3)}
+    .toast{position:absolute;top:20px;left:50%;transform:translateX(-50%) translateY(-120px);background:var(--text);color:#fff;padding:12px 22px;border-radius:var(--rf);font-size:13px;font-weight:600;z-index:200;pointer-events:none;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .bottom{padding:12px 22px 20px;font-size:11px;color:var(--text3);display:flex;justify-content:space-between}
+    .logout{color:var(--red);cursor:pointer}
   </style>
 </head>
 <body>
   <div class="app" id="app">
     <div class="toast" id="toast"></div>
-
-    <div class="content" id="mainContent">
-      <div class="header">
-        <div class="logo-row">
-          <span class="logo">сейчас<span class="logo-dot"></span></span>
-          <span class="live-badge" id="liveBadge">LIVE</span>
-        </div>
-        <span class="header-pill" id="radiusPill">радиус 2 км</span>
-      </div>
-
-      <div class="status-card" id="statusCard">
-        <div class="status-row">
-          <div class="user-avatar" id="userAvatar">YS</div>
-          <div class="status-info">
-            <div class="status-name">Вы</div>
-            <div class="status-subtitle" id="statusSubtitle">Подключение...</div>
-          </div>
-          <div class="status-indicator" id="statusDot"></div>
-        </div>
-        <button class="btn-main" id="freeBtn">
-          <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M10 6v8M6 10h8"/></svg>
-          <span id="freeBtnText">Загрузка...</span>
-        </button>
-      </div>
-
-      <div class="quick-actions">
-        <div class="quick-action" id="qaNearby">Рядом</div>
-        <div class="quick-action" id="qaFriends">Друзья</div>
-        <div class="quick-action" id="qaParty">Вечеринки</div>
-      </div>
-
-      <div class="section-label">Настроение</div>
-      <div class="mood-scroll" id="moodScroll">
-        <div class="mood-chip selected" data-mood="coffee">Кофе</div>
-        <div class="mood-chip" data-mood="bar">Бар</div>
-        <div class="mood-chip" data-mood="walk">Прогулка</div>
-        <div class="mood-chip" data-mood="games">Настолки</div>
-        <div class="mood-chip" data-mood="cinema">Кино</div>
-        <div class="mood-chip" data-mood="sport">Спорт</div>
-      </div>
-
-      <div class="people-header">
-        <span class="people-title">Рядом</span>
-        <span class="people-count" id="peopleCount">0 человек</span>
-      </div>
-      <div class="people-list" id="peopleList"></div>
-      <div class="empty-state" id="emptyState">
-        <div class="empty-circle">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-        </div>
-        <div class="empty-title">Загрузка...</div>
-        <div class="empty-desc">Подключение к базе данных</div>
-      </div>
-    </div>
-
-    <div class="bottom-bar">
-      <span id="connectionLabel">Автономный режим</span>
-      <span class="premium" id="premiumLink">Premium</span>
-    </div>
-
-    <div class="modal-backdrop" id="chatModal" style="display:none;">
-      <div class="chat-sheet">
-        <div class="chat-header">
-          <div class="chat-header-left">
-            <div class="chat-avatar-sm" id="chatAvatar">A</div>
-            <div>
-              <div class="chat-title" id="chatTitle">Чат</div>
-              <div class="chat-subtitle">в сети</div>
-            </div>
-          </div>
-          <div class="chat-close" id="chatClose">✕</div>
-        </div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-row">
-          <input class="chat-input" id="chatInput" placeholder="Сообщение...">
-          <button class="chat-send" id="chatSend">
-            <svg viewBox="0 0 20 20"><line x1="5" y1="10" x2="15" y2="10"/><polyline points="10 5 15 10 10 15"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    <div id="root"></div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-    // ============ ВАШИ РЕАЛЬНЫЕ ДАННЫЕ SUPABASE ============
-    const SUPABASE_URL = 'https://ptacsfcnvbjnuncwcjth.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0YWNzZmNudmJqbnVuY3djanRoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0NjUzODIsImV4cCI6MjA5NzA0MTM4Mn0.lVPnBmLVhT2a3jPhzJyi6_KYZW3WJS7TuFdY828-_3Y';
+  <script>
+    // ============ ВАШИ КЛЮЧИ FIREBASE ============
+    const firebaseConfig = {
+      apiKey: "AIzaSyDbqMxqr3nDVmJuQx5lz4QEpbTKMjnizy0",
+      authDomain: "antinet-e00ae.firebaseapp.com",
+      projectId: "antinet-e00ae",
+      storageBucket: "antinet-e00ae.firebasestorage.app",
+      messagingSenderId: "117730505415",
+      appId: "1:117730505415:web:43c174465110fda238c4e2"
+    };
 
-    // Инициализация Supabase
-    let supabase = null;
-    let isOnline = false;
-
-    try {
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      console.log('Supabase клиент создан');
-      isOnline = true;
-    } catch (e) {
-      console.warn('Supabase не подключен:', e);
-    }
-
-    // ============ ЛОКАЛЬНАЯ БД (FALLBACK) ============
-    class LocalDB {
-      get(key) {
-        try {
-          const data = localStorage.getItem(key);
-          return data ? JSON.parse(data) : null;
-        } catch { return null; }
-      }
-      set(key, value) {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-        } catch {}
-      }
-    }
+    // Инициализация Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
     // ============ ПРИЛОЖЕНИЕ ============
-    class App {
-      constructor() {
-        this.local = new LocalDB();
-        this.state = { isFree: false, mood: 'coffee', people: [], chat: null, messages: [] };
-        this.toastTimer = null;
-        this.init();
-      }
+    const $ = (s) => document.querySelector(s);
+    const root = $('#root');
+    const toast = $('#toast');
 
-      $(s) { return document.querySelector(s); }
-      $$(s) { return document.querySelectorAll(s); }
-
-      async init() {
-        console.log('Инициализация приложения...');
-        await this.loadData();
-        this.render();
-        this.updateStatusUI();
-        this.bindEvents();
-        this.startTimer();
-        if (isOnline && supabase) this.subscribeToRealtime();
-        this.updateConnectionLabel();
-        console.log('Приложение готово');
-      }
-
-      updateConnectionLabel() {
-        const label = this.$('#connectionLabel');
-        if (label) {
-          label.textContent = isOnline ? 'Подключено к облаку' : 'Локальный режим';
-        }
-      }
-
-      async loadData() {
-        try {
-          if (isOnline && supabase) {
-            console.log('Загрузка из Supabase...');
-            // Загружаем людей
-            const { data: people, error: peopleError } = await supabase
-              .from('people')
-              .select('*')
-              .order('id');
-            
-            if (peopleError) throw peopleError;
-            if (people && people.length > 0) {
-              this.state.people = people;
-              console.log('Загружено людей:', people.length);
-            }
-
-            // Загружаем пользователя
-            const { data: userData, error: userError } = await supabase
-              .from('users')
-              .select('*')
-              .eq('id', 1)
-              .single();
-
-            if (!userError && userData) {
-              this.state.isFree = userData.is_free || false;
-              this.state.mood = userData.mood || 'coffee';
-              console.log('Данные пользователя загружены');
-            }
-
-            this.showToast('Данные загружены из облака', 'success');
-          } else {
-            // Локальная загрузка
-            this.state.people = this.local.get('people') || this.getDefaultPeople();
-            const user = this.local.get('user') || { isFree: false, mood: 'coffee' };
-            this.state.isFree = user.isFree;
-            this.state.mood = user.mood;
-            this.showToast('Локальный режим');
-          }
-        } catch (e) {
-          console.error('Ошибка загрузки:', e);
-          this.state.people = this.local.get('people') || this.getDefaultPeople();
-          const user = this.local.get('user') || { isFree: false, mood: 'coffee' };
-          this.state.isFree = user.isFree;
-          this.state.mood = user.mood;
-          this.showToast('Загружены локальные данные');
-        }
-
-        // Сохраняем локально в любом случае
-        this.saveLocal();
-      }
-
-      getDefaultPeople() {
-        return [
-          { id:1, name:'Алиса', init:'A', mood:'coffee', rel:'friend', time:18, online:true, dist:'0.3 км' },
-          { id:2, name:'Марк', init:'M', mood:'bar', rel:'mutual', time:42, online:true, dist:'0.5 км' },
-          { id:3, name:'Даша', init:'D', mood:'walk', rel:'friend', time:7, online:true, dist:'0.2 км' },
-          { id:4, name:'Никита', init:'N', mood:'games', rel:'mutual', time:92, online:true, dist:'0.8 км' },
-          { id:5, name:'Катя', init:'K', mood:'coffee', rel:'friend', time:134, online:true, dist:'1.1 км' },
-          { id:6, name:'Лев', init:'L', mood:'sport', rel:'friend', time:55, online:true, dist:'0.6 км' },
-          { id:7, name:'Соня', init:'S', mood:'cinema', rel:'mutual', time:200, online:true, dist:'1.5 км' },
-        ];
-      }
-
-      async saveData() {
-        if (isOnline && supabase) {
-          try {
-            // Сохраняем пользователя
-            await supabase.from('users').upsert({
-              id: 1,
-              is_free: this.state.isFree,
-              mood: this.state.mood,
-              updated_at: new Date().toISOString()
-            });
-            console.log('Сохранено в Supabase');
-          } catch (e) {
-            console.error('Ошибка сохранения в Supabase:', e);
-          }
-        }
-        this.saveLocal();
-      }
-
-      saveLocal() {
-        this.local.set('people', this.state.people);
-        this.local.set('user', { isFree: this.state.isFree, mood: this.state.mood });
-      }
-
-      subscribeToRealtime() {
-        if (!supabase) return;
-        
-        supabase
-          .channel('people-changes')
-          .on('postgres_changes', 
-            { event: '*', schema: 'public', table: 'people' }, 
-            (payload) => {
-              console.log('Изменение в таблице people:', payload);
-              this.loadData().then(() => this.render());
-            }
-          )
-          .subscribe();
-        
-        console.log('Realtime подписка активирована');
-      }
-
-      filtered() {
-        return this.state.people.filter(p => p.online && p.mood === this.state.mood);
-      }
-
-      showToast(msg, type = '') {
-        const toast = this.$('#toast');
-        if (this.toastTimer) clearTimeout(this.toastTimer);
-        toast.textContent = msg;
-        toast.className = `toast ${type}`;
-        requestAnimationFrame(() => {
-          toast.classList.add('show');
-          this.toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
-        });
-      }
-
-      formatTime(m) {
-        return m < 60 ? `${m} мин` : `${Math.floor(m/60)} ч ${m%60} мин`;
-      }
-
-      plural(n, one, few) {
-        const m = n % 10, h = n % 100;
-        return (m===1 && h!==11) ? one : ([2,3,4].includes(m) && ![12,13,14].includes(h)) ? few : 'человек';
-      }
-
-      render() {
-        const list = this.filtered();
-        const peopleList = this.$('#peopleList');
-        const peopleCount = this.$('#peopleCount');
-        const emptyState = this.$('#emptyState');
-
-        peopleList.innerHTML = '';
-
-        if (list.length === 0) {
-          emptyState.style.display = 'flex';
-          peopleCount.textContent = '0 человек';
-        } else {
-          emptyState.style.display = 'none';
-          peopleCount.textContent = `${list.length} ${this.plural(list.length, 'человек', 'человека')}`;
-        }
-
-        list.forEach((p, i) => {
-          const urgent = p.time < 15;
-          const card = document.createElement('div');
-          card.className = `person-card${urgent ? ' urgent' : ''}`;
-          card.innerHTML = `
-            <div class="person-avatar">${p.init}<span class="online-dot"></span></div>
-            <div class="person-info">
-              <div class="person-name-row">
-                <span class="person-name">${p.name}</span>
-                <span class="person-tag ${p.rel==='friend'?'friend':'mutual'}">${p.rel==='friend'?'друг':'общий'}</span>
-              </div>
-              <div class="person-mood">${this.getMoodName(p.mood)}</div>
-              <div class="person-distance">${p.dist}</div>
-            </div>
-            <div class="person-timer">
-              <span class="timer-value${urgent?' critical':''}">${this.formatTime(p.time)}</span>
-            </div>`;
-          card.addEventListener('click', () => this.openChat(p));
-          peopleList.appendChild(card);
-        });
-      }
-
-      getMoodName(mood) {
-        const names = { coffee:'Кофе', bar:'Бар', walk:'Прогулка', games:'Настолки', cinema:'Кино', sport:'Спорт' };
-        return names[mood] || mood;
-      }
-
-      updateStatusUI() {
-        const statusCard = this.$('#statusCard');
-        const statusDot = this.$('#statusDot');
-        const statusSubtitle = this.$('#statusSubtitle');
-        const freeBtnText = this.$('#freeBtnText');
-        const freeBtn = this.$('#freeBtn');
-        const liveBadge = this.$('#liveBadge');
-        const userAvatar = this.$('#userAvatar');
-
-        if (this.state.isFree) {
-          statusCard.classList.add('live');
-          statusDot.classList.add('live');
-          statusSubtitle.textContent = 'Доступен';
-          freeBtnText.textContent = 'Завершить';
-          freeBtn.classList.add('is-active');
-          liveBadge.classList.add('visible');
-          userAvatar.style.background = '#E8F8EC';
-          userAvatar.style.color = '#1ED45E';
-        } else {
-          statusCard.classList.remove('live');
-          statusDot.classList.remove('live');
-          statusSubtitle.textContent = 'Не в сети';
-          freeBtnText.textContent = 'Стать доступным';
-          freeBtn.classList.remove('is-active');
-          liveBadge.classList.remove('visible');
-          userAvatar.style.background = '#F5F5FA';
-          userAvatar.style.color = '#6E6E73';
-        }
-      }
-
-      async toggleFree() {
-        this.state.isFree = !this.state.isFree;
-        this.updateStatusUI();
-
-        if (this.state.isFree) {
-          if (!this.state.people.find(p => p.id === 0)) {
-            this.state.people.unshift({
-              id: 0, name: 'Вы', init: 'YS', mood: this.state.mood,
-              rel: 'friend', time: 1440, online: true, dist: 'здесь'
-            });
-          }
-          this.showToast('Вы в эфире!', 'success');
-        } else {
-          this.state.people = this.state.people.filter(p => p.id !== 0);
-          this.showToast('Вы не в сети');
-        }
-
-        await this.saveData();
-        this.render();
-      }
-
-      async setMood(mood) {
-        this.state.mood = mood;
-        this.$$('.mood-chip').forEach(c => c.classList.remove('selected'));
-        const selected = document.querySelector(`.mood-chip[data-mood="${mood}"]`);
-        if (selected) selected.classList.add('selected');
-        
-        await this.saveData();
-        this.render();
-      }
-
-      async openChat(person) {
-        this.state.chat = person;
-        
-        // Загружаем сообщения
-        if (isOnline && supabase) {
-          const { data } = await supabase
-            .from('messages')
-            .select('*')
-            .eq('person_id', person.id)
-            .order('created_at', { ascending: true });
-          this.state.messages = data || [];
-        } else {
-          this.state.messages = this.local.get(`chat_${person.id}`) || [];
-        }
-
-        if (this.state.messages.length === 0) {
-          this.state.messages = [{
-            text: `Привет! Я свободен для «${this.getMoodName(person.mood)}». Встретимся?`,
-            type: 'incoming',
-            created_at: new Date().toISOString()
-          }];
-        }
-
-        this.$('#chatTitle').textContent = person.name;
-        this.$('#chatAvatar').textContent = person.init;
-        this.renderChat();
-        this.$('#chatModal').style.display = 'flex';
-        this.$('#mainContent').style.overflow = 'hidden';
-        setTimeout(() => this.$('#chatInput').focus(), 200);
-      }
-
-      closeChat() {
-        this.$('#chatModal').style.display = 'none';
-        this.state.chat = null;
-        this.$('#mainContent').style.overflow = '';
-      }
-
-      async sendMessage() {
-        const input = this.$('#chatInput');
-        const text = input.value.trim();
-        if (!text || !this.state.chat) return;
-
-        const message = {
-          text,
-          type: 'outgoing',
-          person_id: this.state.chat.id,
-          created_at: new Date().toISOString()
-        };
-
-        this.state.messages.push(message);
-        input.value = '';
-        this.renderChat();
-
-        // Сохраняем сообщение
-        if (isOnline && supabase) {
-          try {
-            await supabase.from('messages').insert(message);
-          } catch (e) {
-            console.error('Ошибка сохранения сообщения:', e);
-          }
-        }
-        this.local.set(`chat_${this.state.chat.id}`, this.state.messages);
-
-        // Автоответ
-        setTimeout(async () => {
-          if (this.state.chat) {
-            const replies = ['Отлично! Давай встретимся', 'Буду через 15 мин', 'Договорились!', 'Жду тебя'];
-            const reply = {
-              text: replies[Math.floor(Math.random() * replies.length)],
-              type: 'incoming',
-              person_id: this.state.chat.id,
-              created_at: new Date().toISOString()
-            };
-            this.state.messages.push(reply);
-            this.renderChat();
-
-            if (isOnline && supabase) {
-              try {
-                await supabase.from('messages').insert(reply);
-              } catch (e) {}
-            }
-            this.local.set(`chat_${this.state.chat.id}`, this.state.messages);
-          }
-        }, 1000 + Math.random() * 1000);
-      }
-
-      renderChat() {
-        const container = this.$('#chatMessages');
-        container.innerHTML = this.state.messages.map(m =>
-          `<div class="msg ${m.type === 'incoming' ? 'incoming' : 'outgoing'}">${m.text}</div>`
-        ).join('');
-        container.scrollTop = container.scrollHeight;
-      }
-
-      async tick() {
-        this.state.people.forEach(p => {
-          if (p.time > 0) p.time = Math.max(0, p.time - 1);
-          if (p.time === 0 && p.online) p.online = false;
-        });
-        
-        if (isOnline && supabase) {
-          try {
-            await supabase.from('people').upsert(this.state.people);
-          } catch (e) {}
-        }
-        this.saveLocal();
-        this.render();
-      }
-
-      startTimer() {
-        setInterval(() => this.tick(), 60000);
-      }
-
-      bindEvents() {
-        this.$('#freeBtn').addEventListener('click', () => this.toggleFree());
-        
-        this.$('#moodScroll').addEventListener('click', (e) => {
-          const chip = e.target.closest('.mood-chip');
-          if (chip) this.setMood(chip.dataset.mood);
-        });
-
-        this.$('#chatClose').addEventListener('click', () => this.closeChat());
-        this.$('#chatModal').addEventListener('click', (e) => {
-          if (e.target === this.$('#chatModal')) this.closeChat();
-        });
-
-        this.$('#chatSend').addEventListener('click', () => this.sendMessage());
-        this.$('#chatInput').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') this.sendMessage();
-        });
-
-        this.$('#premiumLink').addEventListener('click', () => {
-          this.showToast('Premium: расширенный радиус, вечеринки', 'warning');
-        });
-
-        this.$('#radiusPill').addEventListener('click', () => {
-          this.showToast('Радиус поиска: 2 км');
-        });
-
-        this.$('#qaNearby').addEventListener('click', () => this.showToast('Поиск поблизости'));
-        this.$('#qaFriends').addEventListener('click', () => this.showToast('Только друзья'));
-        this.$('#qaParty').addEventListener('click', () => this.showToast('Вечеринки (Premium)'));
-      }
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
     }
 
-    // Запуск
-    const app = new App();
+    const moods = {
+      coffee:'Кофе', bar:'Бар', walk:'Прогулка', games:'Настолки', cinema:'Кино', sport:'Спорт'
+    };
+
+    function formatTime(m) {
+      return m < 60 ? `${m} мин` : `${Math.floor(m/60)} ч ${m%60} мин`;
+    }
+
+    // ============ ЭКРАНЫ ============
+
+    function renderAuth() {
+      root.innerHTML = `
+        <div class="screen">
+          <div class="center">
+            <div class="logo">сейчас<span class="dot"></span></div>
+            <div class="subtitle">Встречи с друзьями в реальном времени</div>
+          </div>
+          <div class="card">
+            <div class="label">Email</div>
+            <input class="input" id="email" type="email" placeholder="your@email.com">
+            <div class="label">Пароль</div>
+            <input class="input" id="password" type="password" placeholder="Минимум 6 символов">
+            <div id="authError" class="error"></div>
+            <button class="btn" id="loginBtn">Войти</button>
+            <button class="btn" id="registerBtn" style="background:transparent;color:var(--accent)">Создать аккаунт</button>
+          </div>
+        </div>
+      `;
+
+      $('#loginBtn').addEventListener('click', () => {
+        const email = $('#email').value;
+        const pass = $('#password').value;
+        if (!email || !pass) {
+          $('#authError').textContent = 'Заполните все поля';
+          return;
+        }
+        auth.signInWithEmailAndPassword(email, pass)
+          .then(() => showToast('Вход выполнен'))
+          .catch(e => $('#authError').textContent = 'Ошибка: ' + e.message);
+      });
+
+      $('#registerBtn').addEventListener('click', () => {
+        const email = $('#email').value;
+        const pass = $('#password').value;
+        if (!email || !pass) {
+          $('#authError').textContent = 'Заполните все поля';
+          return;
+        }
+        if (pass.length < 6) {
+          $('#authError').textContent = 'Пароль минимум 6 символов';
+          return;
+        }
+        auth.createUserWithEmailAndPassword(email, pass)
+          .then(() => showToast('Аккаунт создан'))
+          .catch(e => $('#authError').textContent = 'Ошибка: ' + e.message);
+      });
+    }
+
+    function renderApp(user) {
+      const uid = user.uid;
+      
+      root.innerHTML = `
+        <div class="screen" id="mainScreen">
+          <div class="header">
+            <div class="logo-sm">сейчас<span class="dot"></span></div>
+            <div class="pill" id="radiusPill">радиус 2 км</div>
+          </div>
+          <div class="status-card" id="statusCard">
+            <div class="row">
+              <div class="avatar" id="userAvatar">${user.email[0].toUpperCase()}</div>
+              <div class="info">
+                <div class="name">${user.email.split('@')[0]}</div>
+                <div class="stat" id="statusText">Не в сети</div>
+              </div>
+              <div class="ind" id="statusDot"></div>
+            </div>
+            <button class="btn" id="freeBtn">Стать доступным</button>
+          </div>
+          <div class="chips" id="moodChips">
+            ${Object.entries(moods).map(([k,v]) => `<div class="chip" data-mood="${k}">${v}</div>`).join('')}
+          </div>
+          <div class="list" id="peopleList"></div>
+          <div class="empty" id="emptyState">Загрузка...</div>
+        </div>
+        <div class="bottom">
+          <span>Чаты живут 24 часа</span>
+          <span class="logout" id="logoutBtn">Выйти</span>
+        </div>
+      `;
+
+      let currentMood = 'coffee';
+      let isFree = false;
+      
+      $('#moodChips').querySelector(`[data-mood="${currentMood}"]`).classList.add('sel');
+
+      // Загрузка состояния пользователя
+      db.collection('users').doc(uid).get().then(doc => {
+        if (doc.exists) {
+          isFree = doc.data().isFree || false;
+          currentMood = doc.data().mood || 'coffee';
+          updateStatusUI();
+          updateMoodUI();
+        }
+      });
+
+      // Загрузка людей
+      function loadPeople() {
+        db.collection('people').where('mood', '==', currentMood).where('online', '==', true)
+          .onSnapshot(snapshot => {
+            const list = $('#peopleList');
+            const empty = $('#emptyState');
+            list.innerHTML = '';
+            
+            if (snapshot.empty) {
+              empty.style.display = 'block';
+              empty.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text3)">Никого нет поблизости</div>';
+              return;
+            }
+            
+            empty.style.display = 'none';
+            snapshot.forEach(doc => {
+              const p = doc.data();
+              if (p.id === uid) return; // Не показываем себя
+              const urgent = p.time < 15;
+              const div = document.createElement('div');
+              div.className = 'person';
+              div.innerHTML = `
+                <div class="p-avatar">${p.init}<span class="online"></span></div>
+                <div class="p-info">
+                  <div class="p-name">${p.name} <span class="tag ${p.rel}">${p.rel==='friend'?'друг':'общий'}</span></div>
+                  <div class="p-mood">${moods[p.mood]}</div>
+                </div>
+                <div class="timer ${urgent ? 'crit' : ''}">${formatTime(p.time)}</div>`;
+              list.appendChild(div);
+            });
+          });
+      }
+
+      function updateStatusUI() {
+        const card = $('#statusCard');
+        const dot = $('#statusDot');
+        const text = $('#statusText');
+        const btn = $('#freeBtn');
+        
+        if (isFree) {
+          card.classList.add('live');
+          dot.classList.add('on');
+          text.textContent = 'Доступен';
+          btn.textContent = 'Завершить';
+          btn.classList.add('green');
+        } else {
+          card.classList.remove('live');
+          dot.classList.remove('on');
+          text.textContent = 'Не в сети';
+          btn.textContent = 'Стать доступным';
+          btn.classList.remove('green');
+        }
+      }
+
+      function updateMoodUI() {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+        const selected = document.querySelector(`[data-mood="${currentMood}"]`);
+        if (selected) selected.classList.add('sel');
+      }
+
+      $('#freeBtn').addEventListener('click', () => {
+        isFree = !isFree;
+        updateStatusUI();
+        db.collection('users').doc(uid).set({ isFree, mood: currentMood }, { merge: true });
+        
+        if (isFree) {
+          db.collection('people').doc(uid).set({
+            id: uid,
+            name: user.email.split('@')[0],
+            init: user.email[0].toUpperCase(),
+            mood: currentMood,
+            rel: 'friend',
+            time: 1440,
+            online: true,
+            dist: 'здесь'
+          });
+          showToast('Вы в эфире!');
+        } else {
+          db.collection('people').doc(uid).delete();
+          showToast('Вы не в сети');
+        }
+      });
+
+      $('#moodChips').addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        currentMood = chip.dataset.mood;
+        updateMoodUI();
+        db.collection('users').doc(uid).set({ mood: currentMood }, { merge: true });
+        if (isFree) {
+          db.collection('people').doc(uid).update({ mood: currentMood });
+        }
+        loadPeople();
+      });
+
+      $('#radiusPill').addEventListener('click', () => showToast('Радиус поиска: 2 км'));
+      $('#logoutBtn').addEventListener('click', () => auth.signOut());
+
+      loadPeople();
+
+      // Таймер
+      setInterval(() => {
+        db.collection('people').where('online', '==', true).get().then(snapshot => {
+          snapshot.forEach(doc => {
+            const p = doc.data();
+            if (p.time > 0) {
+              db.collection('people').doc(doc.id).update({ time: p.time - 1 });
+            }
+            if (p.time <= 1) {
+              db.collection('people').doc(doc.id).update({ online: false });
+            }
+          });
+        });
+      }, 60000);
+    }
+
+    // Слушатель аутентификации
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        renderApp(user);
+      } else {
+        renderAuth();
+      }
+    });
   </script>
 </body>
 </html>
