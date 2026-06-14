@@ -803,4 +803,204 @@
         const userAvatar = this.$('#userAvatar');
 
         if (this.state.isFree) {
-          statusCard
+          statusCard.classList.add('live');
+          statusDot.classList.add('live');
+          statusSubtitle.textContent = 'Доступен';
+          freeBtnText.textContent = 'Завершить';
+          freeBtn.classList.add('is-active');
+          liveBadge.classList.add('visible');
+          userAvatar.style.background = '#E8F8EC';
+          userAvatar.style.color = '#1ED45E';
+        } else {
+          statusCard.classList.remove('live');
+          statusDot.classList.remove('live');
+          statusSubtitle.textContent = 'Не в сети';
+          freeBtnText.textContent = 'Стать доступным';
+          freeBtn.classList.remove('is-active');
+          liveBadge.classList.remove('visible');
+          userAvatar.style.background = '#F5F5FA';
+          userAvatar.style.color = '#6E6E73';
+        }
+      }
+
+      async toggleFree() {
+        this.state.isFree = !this.state.isFree;
+        this.updateStatusUI();
+
+        if (this.state.isFree) {
+          if (!this.state.people.find(p => p.id === 0)) {
+            this.state.people.unshift({
+              id: 0, name: 'Вы', init: 'YS', mood: this.state.mood,
+              rel: 'friend', time: 1440, online: true, dist: 'здесь'
+            });
+          }
+          this.showToast('Вы в эфире!', 'success');
+        } else {
+          this.state.people = this.state.people.filter(p => p.id !== 0);
+          this.showToast('Вы не в сети');
+        }
+
+        await this.saveData();
+        this.render();
+      }
+
+      async setMood(mood) {
+        this.state.mood = mood;
+        this.$$('.mood-chip').forEach(c => c.classList.remove('selected'));
+        const selected = document.querySelector(`.mood-chip[data-mood="${mood}"]`);
+        if (selected) selected.classList.add('selected');
+        
+        await this.saveData();
+        this.render();
+      }
+
+      async openChat(person) {
+        this.state.chat = person;
+        
+        // Загружаем сообщения
+        if (isOnline && supabase) {
+          const { data } = await supabase
+            .from('messages')
+            .select('*')
+            .eq('person_id', person.id)
+            .order('created_at', { ascending: true });
+          this.state.messages = data || [];
+        } else {
+          this.state.messages = this.local.get(`chat_${person.id}`) || [];
+        }
+
+        if (this.state.messages.length === 0) {
+          this.state.messages = [{
+            text: `Привет! Я свободен для «${this.getMoodName(person.mood)}». Встретимся?`,
+            type: 'incoming',
+            created_at: new Date().toISOString()
+          }];
+        }
+
+        this.$('#chatTitle').textContent = person.name;
+        this.$('#chatAvatar').textContent = person.init;
+        this.renderChat();
+        this.$('#chatModal').style.display = 'flex';
+        this.$('#mainContent').style.overflow = 'hidden';
+        setTimeout(() => this.$('#chatInput').focus(), 200);
+      }
+
+      closeChat() {
+        this.$('#chatModal').style.display = 'none';
+        this.state.chat = null;
+        this.$('#mainContent').style.overflow = '';
+      }
+
+      async sendMessage() {
+        const input = this.$('#chatInput');
+        const text = input.value.trim();
+        if (!text || !this.state.chat) return;
+
+        const message = {
+          text,
+          type: 'outgoing',
+          person_id: this.state.chat.id,
+          created_at: new Date().toISOString()
+        };
+
+        this.state.messages.push(message);
+        input.value = '';
+        this.renderChat();
+
+        // Сохраняем сообщение
+        if (isOnline && supabase) {
+          try {
+            await supabase.from('messages').insert(message);
+          } catch (e) {
+            console.error('Ошибка сохранения сообщения:', e);
+          }
+        }
+        this.local.set(`chat_${this.state.chat.id}`, this.state.messages);
+
+        // Автоответ
+        setTimeout(async () => {
+          if (this.state.chat) {
+            const replies = ['Отлично! Давай встретимся', 'Буду через 15 мин', 'Договорились!', 'Жду тебя'];
+            const reply = {
+              text: replies[Math.floor(Math.random() * replies.length)],
+              type: 'incoming',
+              person_id: this.state.chat.id,
+              created_at: new Date().toISOString()
+            };
+            this.state.messages.push(reply);
+            this.renderChat();
+
+            if (isOnline && supabase) {
+              try {
+                await supabase.from('messages').insert(reply);
+              } catch (e) {}
+            }
+            this.local.set(`chat_${this.state.chat.id}`, this.state.messages);
+          }
+        }, 1000 + Math.random() * 1000);
+      }
+
+      renderChat() {
+        const container = this.$('#chatMessages');
+        container.innerHTML = this.state.messages.map(m =>
+          `<div class="msg ${m.type === 'incoming' ? 'incoming' : 'outgoing'}">${m.text}</div>`
+        ).join('');
+        container.scrollTop = container.scrollHeight;
+      }
+
+      async tick() {
+        this.state.people.forEach(p => {
+          if (p.time > 0) p.time = Math.max(0, p.time - 1);
+          if (p.time === 0 && p.online) p.online = false;
+        });
+        
+        if (isOnline && supabase) {
+          try {
+            await supabase.from('people').upsert(this.state.people);
+          } catch (e) {}
+        }
+        this.saveLocal();
+        this.render();
+      }
+
+      startTimer() {
+        setInterval(() => this.tick(), 60000);
+      }
+
+      bindEvents() {
+        this.$('#freeBtn').addEventListener('click', () => this.toggleFree());
+        
+        this.$('#moodScroll').addEventListener('click', (e) => {
+          const chip = e.target.closest('.mood-chip');
+          if (chip) this.setMood(chip.dataset.mood);
+        });
+
+        this.$('#chatClose').addEventListener('click', () => this.closeChat());
+        this.$('#chatModal').addEventListener('click', (e) => {
+          if (e.target === this.$('#chatModal')) this.closeChat();
+        });
+
+        this.$('#chatSend').addEventListener('click', () => this.sendMessage());
+        this.$('#chatInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.sendMessage();
+        });
+
+        this.$('#premiumLink').addEventListener('click', () => {
+          this.showToast('Premium: расширенный радиус, вечеринки', 'warning');
+        });
+
+        this.$('#radiusPill').addEventListener('click', () => {
+          this.showToast('Радиус поиска: 2 км');
+        });
+
+        this.$('#qaNearby').addEventListener('click', () => this.showToast('Поиск поблизости'));
+        this.$('#qaFriends').addEventListener('click', () => this.showToast('Только друзья'));
+        this.$('#qaParty').addEventListener('click', () => this.showToast('Вечеринки (Premium)'));
+      }
+    }
+
+    // Запуск
+    const app = new App();
+  </script>
+</body>
+</html>
