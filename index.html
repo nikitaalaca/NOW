@@ -37,12 +37,57 @@
       --shadow-button: 0 2px 8px rgba(10,132,255,0.3);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
-    html, body { height: 100%; width: 100%; font-family: var(--font); background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; transition: background 0.3s, color 0.3s; }
-    .app { width: 100%; height: 100%; max-width: 430px; max-height: 932px; background: var(--bg); display: flex; flex-direction: column; position: relative; overflow: hidden; transition: background 0.3s; }
-    @media (min-width: 431px) { .app { border-radius: 44px; box-shadow: 0 30px 80px rgba(0,0,0,0.12); height: 92vh; max-height: 880px; } }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, color 0.3s;
+      touch-action: manipulation; /* запрет масштабирования жестами */
+    }
+    .app {
+      width: 100%;
+      height: 100%;
+      max-width: 430px;
+      max-height: 932px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    @media (min-width: 431px) {
+      .app {
+        border-radius: 44px;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.12);
+        height: 92vh;
+        max-height: 880px;
+      }
+    }
 
-    .screen { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 22px; display: flex; flex-direction: column; gap: 20px; }
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      -webkit-overflow-scrolling: touch;
+    }
     .screen::-webkit-scrollbar { width: 0; }
 
     .center { text-align: center; padding: 60px 0 20px; }
@@ -50,15 +95,51 @@
     .logo-dot { display: inline-block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; margin-left: 4px; vertical-align: super; }
     .subtitle { font-size: 14px; color: var(--text-tertiary); margin-top: 8px; }
 
-    .card { background: var(--surface); border-radius: var(--radius-xl); padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--shadow-card); transition: background 0.3s, box-shadow 0.3s; }
-    .theme-dark .card { background: var(--surface); }
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
     .label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-tertiary); }
-    .input { padding: 14px 16px; border-radius: var(--radius-md); border: none; background: #F5F5FA; font-size: 15px; font-family: var(--font); outline: none; transition: all var(--transition); width: 100%; }
+    .input {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: #F5F5FA;
+      font-size: 15px;
+      font-family: var(--font);
+      outline: none;
+      transition: all var(--transition);
+      width: 100%;
+      color: var(--text);
+    }
     .theme-dark .input { background: #3A3A3C; color: white; }
     .input:focus { background: #EEEEF5; }
     .theme-dark .input:focus { background: #4A4A4C; }
 
-    .btn { width: 100%; padding: 15px 24px; border-radius: var(--radius-md); font-size: 16px; font-weight: 600; letter-spacing: -0.2px; cursor: pointer; border: none; color: white; background: var(--accent); transition: all var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow-button); }
+    .btn {
+      width: 100%;
+      padding: 15px 24px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      background: var(--accent);
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+    }
     .btn:active { transform: scale(0.97); }
     .btn.green { background: var(--accent-green); box-shadow: var(--shadow-button-green); }
     .btn.outline { background: transparent; color: var(--accent); box-shadow: none; }
@@ -67,35 +148,66 @@
 
     .header { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
     .logo-sm { font-size: 30px; font-weight: 700; letter-spacing: -0.8px; color: var(--text); }
-    .header-pill { font-size: 12px; font-weight: 600; padding: 7px 15px; border-radius: var(--radius-full); background: var(--surface); color: var(--text-secondary); letter-spacing: 0.1px; box-shadow: var(--shadow-card); cursor: pointer; transition: all var(--transition); }
-    .theme-dark .header-pill { background: var(--surface); color: var(--text-secondary); }
-    .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-card); font-size: 18px; color: var(--text-secondary); transition: all var(--transition); overflow: hidden; }
-    .theme-dark .profile-btn { background: var(--surface); }
+    .header-pill {
+      font-size: 12px; font-weight: 600; padding: 7px 15px; border-radius: var(--radius-full);
+      background: var(--surface); color: var(--text-secondary); letter-spacing: 0.1px;
+      box-shadow: var(--shadow-card); cursor: pointer; transition: all var(--transition);
+    }
+    .profile-btn {
+      width: 36px; height: 36px; border-radius: 50%; background: var(--surface);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: var(--shadow-card); font-size: 18px; color: var(--text-secondary);
+      transition: all var(--transition); overflow: hidden;
+    }
     .profile-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    .status-card { background: var(--surface); border-radius: var(--radius-xl); padding: 22px; display: flex; flex-direction: column; gap: 18px; box-shadow: var(--shadow-card); transition: background 0.3s; }
-    .theme-dark .status-card { background: var(--surface); }
+    .status-card {
+      background: var(--surface); border-radius: var(--radius-xl); padding: 22px;
+      display: flex; flex-direction: column; gap: 18px;
+      box-shadow: var(--shadow-card); transition: background 0.3s;
+    }
     .status-card.live { background: #F8FFFA; }
     .theme-dark .status-card.live { background: #1E3A2A; }
     .status-row { display: flex; align-items: center; gap: 12px; }
-    .user-avatar { width: 46px; height: 46px; border-radius: 50%; background: #F5F5FA; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 600; color: var(--text-secondary); flex-shrink: 0; overflow: hidden; }
+    .user-avatar {
+      width: 46px; height: 46px; border-radius: 50%; background: #F5F5FA;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 600; color: var(--text-secondary);
+      flex-shrink: 0; overflow: hidden;
+    }
     .theme-dark .user-avatar { background: #3A3A3C; }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .status-info { flex: 1; }
     .status-name { font-weight: 600; font-size: 16px; letter-spacing: -0.2px; }
     .status-subtitle { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; }
-    .status-indicator { width: 10px; height: 10px; border-radius: 50%; background: #D1D1D6; transition: all var(--transition); flex-shrink: 0; }
-    .status-indicator.live { background: var(--accent-green); box-shadow: 0 0 10px rgba(30,212,94,0.4); animation: pulse 2.5s ease-in-out infinite; }
-    @keyframes pulse { 0%, 100% { box-shadow: 0 0 6px rgba(30,212,94,0.25); } 50% { box-shadow: 0 0 16px rgba(30,212,94,0.5); } }
+    .status-indicator {
+      width: 10px; height: 10px; border-radius: 50%; background: #D1D1D6;
+      transition: all var(--transition); flex-shrink: 0;
+    }
+    .status-indicator.live {
+      background: var(--accent-green); box-shadow: 0 0 10px rgba(30,212,94,0.4);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 6px rgba(30,212,94,0.25); }
+      50% { box-shadow: 0 0 16px rgba(30,212,94,0.5); }
+    }
 
     .quick-actions { display: flex; gap: 8px; }
-    .quick-action { flex: 1; padding: 12px; border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-card); cursor: pointer; transition: all var(--transition); text-align: center; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-    .theme-dark .quick-action { background: var(--surface); }
+    .quick-action {
+      flex: 1; padding: 12px; border-radius: var(--radius-lg); background: var(--surface);
+      box-shadow: var(--shadow-card); cursor: pointer; transition: all var(--transition);
+      text-align: center; font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    }
 
     .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-tertiary); padding: 0 2px; }
     .mood-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 0; }
-    .mood-chip { padding: 10px 18px; border-radius: var(--radius-full); font-size: 14px; font-weight: 500; white-space: nowrap; background: var(--surface); cursor: pointer; transition: all var(--transition); color: var(--text-secondary); letter-spacing: -0.1px; box-shadow: var(--shadow-card); flex-shrink: 0; }
-    .theme-dark .mood-chip { background: var(--surface); }
+    .mood-chip {
+      padding: 10px 18px; border-radius: var(--radius-full); font-size: 14px;
+      font-weight: 500; white-space: nowrap; background: var(--surface);
+      cursor: pointer; transition: all var(--transition); color: var(--text-secondary);
+      letter-spacing: -0.1px; box-shadow: var(--shadow-card); flex-shrink: 0;
+    }
     .mood-chip.selected { background: var(--text); color: white; font-weight: 600; box-shadow: 0 4px 14px rgba(0,0,0,0.1); }
 
     .people-header { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
@@ -103,12 +215,20 @@
     .people-count { font-size: 13px; font-weight: 500; color: var(--text-tertiary); }
     .people-list { display: flex; flex-direction: column; gap: 8px; }
 
-    .person-card { display: flex; align-items: center; gap: 14px; background: var(--surface); border-radius: var(--radius-lg); padding: 15px 17px; cursor: pointer; transition: all var(--transition); box-shadow: var(--shadow-card); }
-    .theme-dark .person-card { background: var(--surface); }
+    .person-card {
+      display: flex; align-items: center; gap: 14px; background: var(--surface);
+      border-radius: var(--radius-lg); padding: 15px 17px; cursor: pointer;
+      transition: all var(--transition); box-shadow: var(--shadow-card);
+    }
     .person-card:active { transform: scale(0.98); background: #F9F9FC; }
     .theme-dark .person-card:active { background: #3A3A3C; }
     .person-card.urgent { border-left: 3px solid var(--accent-red); }
-    .person-avatar { width: 48px; height: 48px; border-radius: 50%; background: #F5F5FA; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 600; color: var(--text-secondary); flex-shrink: 0; position: relative; overflow: hidden; }
+    .person-avatar {
+      width: 48px; height: 48px; border-radius: 50%; background: #F5F5FA;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 600; color: var(--text-secondary);
+      flex-shrink: 0; position: relative; overflow: hidden;
+    }
     .theme-dark .person-avatar { background: #3A3A3C; }
     .online-dot { position: absolute; bottom: 1px; right: 1px; width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%; border: 2px solid white; }
     .person-info { flex: 1; min-width: 0; }
@@ -119,7 +239,10 @@
     .person-mood { font-size: 13px; color: var(--text-tertiary); }
     .person-distance { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
     .person-timer { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-    .timer-value { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: var(--radius-full); background: #F5F5FA; color: var(--text-secondary); }
+    .timer-value {
+      font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: var(--radius-full);
+      background: #F5F5FA; color: var(--text-secondary);
+    }
     .theme-dark .timer-value { background: #3A3A3C; }
     .timer-value.critical { background: #FFF0F0; color: var(--accent-red); animation: blink 1.2s infinite; }
     .theme-dark .timer-value.critical { background: #4A2020; }
@@ -131,7 +254,13 @@
     .empty-title { font-weight: 600; font-size: 16px; }
     .empty-desc { font-size: 13px; color: var(--text-tertiary); max-width: 220px; line-height: 1.5; }
 
-    .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px); background: var(--text); color: white; padding: 12px 22px; border-radius: var(--radius-full); font-size: 13px; font-weight: 600; z-index: 200; pointer-events: none; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 8px 24px rgba(0,0,0,0.2); white-space: nowrap; }
+    .toast {
+      position: absolute; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px);
+      background: var(--text); color: white; padding: 12px 22px; border-radius: var(--radius-full);
+      font-size: 13px; font-weight: 600; z-index: 200; pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2); white-space: nowrap;
+    }
     .toast.show { transform: translateX(-50%) translateY(0); }
     .toast.success { background: var(--accent-green); }
     .theme-dark .toast { background: #3A3A3C; color: white; }
@@ -140,10 +269,20 @@
     .bottom-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 22px 20px; font-size: 11px; color: var(--text-tertiary); }
     .logout-btn { color: var(--accent-red); cursor: pointer; font-weight: 500; }
 
-    .modal-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .modal-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4); z-index: 100; display: flex;
+      align-items: flex-end; justify-content: center; opacity: 0;
+      pointer-events: none; transition: opacity 0.25s;
+    }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
-    .modal-sheet { width: 100%; max-width: 430px; background: var(--surface); border-radius: 24px 24px 0 0; padding: 20px 22px 30px; display: flex; flex-direction: column; gap: 20px; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); max-height: 85vh; overflow-y: auto; }
-    .theme-dark .modal-sheet { background: var(--surface); }
+    .modal-sheet {
+      width: 100%; max-width: 430px; background: var(--surface);
+      border-radius: 24px 24px 0 0; padding: 20px 22px 30px;
+      display: flex; flex-direction: column; gap: 20px;
+      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 85vh; overflow-y: auto; overflow-x: hidden;
+    }
     .modal-overlay.active .modal-sheet { transform: translateY(0); }
     .modal-handle { width: 36px; height: 5px; background: #D1D1D6; border-radius: 3px; margin: 0 auto 8px; }
 
@@ -170,7 +309,7 @@
     .theme-dark .friend-row { background: var(--surface); }
     .friend-row:active { background: #F0F0F5; }
     .theme-dark .friend-row:active { background: #3A3A3C; }
-    .legal-text { font-size: 13px; line-height: 1.5; color: var(--text-secondary); }
+    .legal-text { font-size: 13px; line-height: 1.5; color: var(--text-secondary); max-height: 60vh; overflow-y: auto; }
   </style>
 </head>
 <body>
@@ -210,23 +349,69 @@
 
     const termsText = `
       <b>Пользовательское соглашение</b><br><br>
-      Настоящее соглашение регулирует использование сервиса «сейчас» (далее – «Сервис»).<br><br>
-      1. Сервис предназначен исключительно для лиц, достигших 18 лет. Регистрируясь, вы подтверждаете, что вам исполнилось 18 лет.<br>
-      2. Вы обязуетесь не использовать Сервис для противоправных действий, оскорблений, спама, распространения вредоносного контента.<br>
-      3. Сервис предоставляется «как есть». Администрация не несёт ответственности за встречи и общение пользователей в реальной жизни.<br>
-      4. Мы оставляем за собой право изменять условия использования. Продолжение использования после изменений означает согласие с новыми условиями.<br>
-      5. Вы можете удалить свой аккаунт в любой момент, написав в поддержку.
+      <b>1. Общие положения</b><br>
+      1.1. Настоящее Пользовательское соглашение (далее — «Соглашение») регулирует отношения между Администрацией Сервиса «сейчас» (далее — «Администрация») и пользователем (далее — «Пользователь») при использовании мобильного приложения «сейчас» (далее — «Сервис»).<br>
+      1.2. Использование Сервиса разрешено только лицам, достигшим 18-летнего возраста. Регистрируясь, Пользователь подтверждает, что ему исполнилось 18 лет.<br>
+      1.3. Начиная использовать Сервис, Пользователь выражает полное и безоговорочное согласие с условиями настоящего Соглашения.<br><br>
+      <b>2. Предмет соглашения</b><br>
+      2.1. Сервис предоставляет Пользователю возможность публиковать информацию о своём текущем настроении и геопозиции (при активации), находить других Пользователей поблизости и обмениваться с ними сообщениями в режиме реального времени.<br>
+      2.2. Администрация оставляет за собой право изменять, дополнять или удалять функциональные возможности Сервиса без предварительного уведомления.<br><br>
+      <b>3. Права и обязанности Пользователя</b><br>
+      3.1. Пользователь обязуется:<br>
+      - предоставлять достоверные данные при регистрации (email, дата рождения);<br>
+      - не использовать Сервис для противоправных действий, оскорблений, распространения спама, вредоносного ПО, материалов, нарушающих права третьих лиц;<br>
+      - не выдавать себя за другое лицо;<br>
+      - соблюдать законодательство Российской Федерации.<br>
+      3.2. Пользователь имеет право в любой момент удалить свой аккаунт, отправив запрос на электронную почту Администрации.<br><br>
+      <b>4. Ответственность</b><br>
+      4.1. Администрация не несёт ответственности за достоверность информации, публикуемой Пользователями, а также за последствия встреч и общения, произошедших между Пользователями в реальной жизни.<br>
+      4.2. Сервис предоставляется «как есть». Администрация не гарантирует бесперебойную работу и не возмещает убытки, возникшие в связи с использованием или невозможностью использования Сервиса.<br>
+      4.3. В случае нарушения Пользователем условий Соглашения, Администрация вправе заблокировать доступ к Сервису без предупреждения.<br><br>
+      <b>5. Заключительные положения</b><br>
+      5.1. Настоящее Соглашение регулируется законодательством Российской Федерации.<br>
+      5.2. Все споры разрешаются путём переговоров, а при недостижении согласия — в судебном порядке по месту нахождения Администрации.<br>
+      5.3. Администрация оставляет за собой право в одностороннем порядке изменять Соглашение. Продолжение использования Сервиса после публикации изменений означает согласие с ними.<br><br>
+      <b>6. Реквизиты и контакты</b><br>
+      Администратор Сервиса: команда «сейчас»<br>
+      Email для обращений: support@antinet.app<br>
+      (реквизиты могут быть уточнены по запросу)
     `;
+
     const privacyText = `
-      <b>Политика конфиденциальности</b><br><br>
-      Мы уважаем вашу приватность и собираем только минимально необходимые данные.<br><br>
-      1. <b>Какие данные собираются:</b> email, имя, аватар (опционально), дата рождения (для проверки возраста), геолокация (только когда вы активны).<br>
-      2. <b>Как используются:</b> для отображения вашего профиля другим пользователям в радиусе поиска.<br>
-      3. <b>Хранение:</b> данные хранятся в облачной базе Firebase (Google Cloud).<br>
-      4. <b>Передача третьим лицам:</b> не передаются, за исключением случаев, предусмотренных законом.<br>
-      5. <b>Удаление данных:</b> вы можете запросить удаление аккаунта через настройки или по email. Все ваши данные будут безвозвратно удалены.<br>
-      6. <b>Файлы cookie:</b> не используются.<br><br>
-      Используя Сервис, вы соглашаетесь с данной политикой.
+      <b>Политика в отношении обработки персональных данных</b><br><br>
+      <b>1. Общие положения</b><br>
+      1.1. Настоящая Политика конфиденциальности (далее — «Политика») разработана в соответствии с Федеральным законом РФ №152-ФЗ «О персональных данных» и определяет порядок обработки и защиты персональных данных пользователей Сервиса «сейчас».<br>
+      1.2. Использование Сервиса означает безоговорочное согласие Пользователя с настоящей Политикой и указанными в ней условиями обработки его персональных данных.<br><br>
+      <b>2. Какие данные собираются</b><br>
+      2.1. При регистрации: адрес электронной почты (email), пароль (в хешированном виде), дата рождения.<br>
+      2.2. При использовании Сервиса: имя (никнейм), аватар (опционально), текущее настроение, геопозиция (только при активации режима «доступен»).<br>
+      2.3. Технические данные: IP-адрес, информация об устройстве, журналы действий (логи) — автоматически собираются серверной инфраструктурой для обеспечения работоспособности и безопасности.<br>
+      2.4. Сервис не собирает специальные категории персональных данных (расовая принадлежность, политические взгляды, религиозные убеждения и т.п.).<br><br>
+      <b>3. Цели обработки данных</b><br>
+      3.1. Предоставление функциональности Сервиса: отображение профиля в поиске, обмен сообщениями, поиск пользователей по настроению и геолокации.<br>
+      3.2. Подтверждение возраста (18+).<br>
+      3.3. Коммуникация с Пользователем (восстановление доступа, ответы на запросы).<br>
+      3.4. Улучшение качества Сервиса и предотвращение мошенничества.<br><br>
+      <b>4. Хранение и защита данных</b><br>
+      4.1. Персональные данные хранятся на облачных серверах Firebase (Google Cloud) в соответствии с их стандартами безопасности.<br>
+      4.2. Администрация принимает технические и организационные меры для защиты данных от несанкционированного доступа, изменения, раскрытия или уничтожения.<br>
+      4.3. Данные хранятся до момента удаления аккаунта Пользователем, после чего уничтожаются в течение 30 календарных дней.<br><br>
+      <b>5. Передача третьим лицам</b><br>
+      5.1. Данные могут быть переданы правоохранительным органам по официальному запросу в соответствии с законодательством РФ.<br>
+      5.2. В иных случаях персональные данные не распространяются и не предоставляются третьим лицам без согласия Пользователя.<br><br>
+      <b>6. Геолокация</b><br>
+      6.1. Геопозиция запрашивается только при активации режима «доступен» и используется для отображения приблизительного расстояния до других пользователей.<br>
+      6.2. Пользователь может в любой момент отключить режим «доступен», и его геоданные перестанут обрабатываться.<br>
+      6.3. Геоданные не сохраняются в долгосрочном архиве; они удаляются после выхода из режима доступности.<br><br>
+      <b>7. Права Пользователя</b><br>
+      7.1. Пользователь имеет право на доступ к своим данным, их уточнение, блокировку или уничтожение.<br>
+      7.2. Для реализации прав необходимо направить запрос на email: support@antinet.app. Запрос будет обработан в течение 10 рабочих дней.<br>
+      7.3. Пользователь может отозвать согласие на обработку персональных данных, удалив аккаунт.<br><br>
+      <b>8. Изменения Политики</b><br>
+      8.1. Администрация вправе вносить изменения в Политику. Новая редакция вступает в силу с момента публикации в Сервисе.<br>
+      8.2. Продолжение использования Сервиса после изменения Политики означает согласие с новыми условиями.<br><br>
+      <b>9. Контакты</b><br>
+      По всем вопросам, связанным с обработкой данных, обращайтесь: support@antinet.app.
     `;
 
     function showToast(msg, type = '') {
@@ -240,6 +425,7 @@
     function formatDistance(km) { return km<1 ? `${Math.round(km*1000)} м` : `${km.toFixed(1)} км`; }
 
     function isAdult(dateString) {
+      if (!dateString) return false;
       const birth = new Date(dateString);
       const today = new Date();
       let age = today.getFullYear() - birth.getFullYear();
@@ -292,7 +478,6 @@
       };
       document.getElementById('passwordInput').addEventListener('keypress',e=>{ if(e.key==='Enter') document.getElementById('loginBtn').click(); });
       
-      // Legal links
       const legalModal = document.getElementById('legalModal');
       const legalContent = document.getElementById('legalContent');
       document.getElementById('termsLink').onclick = (e) => { e.preventDefault(); legalContent.innerHTML = termsText; legalModal.classList.add('active'); };
@@ -315,10 +500,7 @@
           userProfile.birthDate = d.birthDate || '';
           isFree = d.isFree||false;
           currentMood = d.mood||'coffee';
-          // If no birthDate registered (old accounts), prompt
-          if (!userProfile.birthDate) {
-            showToast('Пожалуйста, укажите дату рождения в профиле');
-          }
+          if (!userProfile.birthDate) showToast('Пожалуйста, укажите дату рождения в профиле');
         } else { 
           userProfile.name=user.email.split('@')[0]; userProfile.avatar=''; userProfile.birthDate='';
           db.collection('users').doc(uid).set({
@@ -335,7 +517,6 @@
     function buildUI() {
       const uid = currentUser.uid, userName = userProfile.name, userInitial = userName[0].toUpperCase();
       const avatarHTML = userProfile.avatar ? `<img src="${userProfile.avatar}">` : userInitial;
-      const birthDisplay = userProfile.birthDate ? `Дата рождения: ${userProfile.birthDate}` : 'Возраст не указан';
       
       root.innerHTML = `
         <div class="screen" id="mainScreen">
@@ -357,7 +538,7 @@
           <div style="display:flex; align-items:center; justify-content:space-between"><span>Тёмная тема</span><label style="position:relative; display:inline-block; width:48px; height:26px"><input type="checkbox" id="themeToggle" style="opacity:0;width:0;height:0"><span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#D1D1D6;border-radius:26px;transition:.3s" id="themeSlider"></span></label></div>
           <button class="btn outline" id="requestGeoBtn">Обновить геолокацию</button>
           <p style="font-size:13px;color:var(--text-tertiary)">«сейчас» помогает видеть друзей поблизости и договариваться о встречах в реальном времени. Все диалоги исчезают через 24 часа.</p>
-          <div style="background: var(--surface); border-radius: 12px; padding: 10px; margin-top: 12px; text-align: center; font-size: 12px; color: var(--text-tertiary);">разработчик EGORKIN NIKITA</div>
+          <div style="background: var(--surface); border-radius: 12px; padding: 10px; margin-top: 12px; text-align: center; font-size: 12px; color: var(--text-tertiary);">разработчик команда «сейчас»</div>
           <div style="display:flex; justify-content:space-around; margin-top:8px">
             <a class="link" id="profileTermsLink">Пользовательское соглашение</a>
             <a class="link" id="profilePrivacyLink">Политика конфиденциальности</a>
@@ -456,7 +637,6 @@
 
       document.getElementById('logoutBtn').onclick = async () => { if(isFree) await db.collection('people').doc(uid).delete(); auth.signOut(); };
 
-      // Legal links in profile
       const legalModal = document.getElementById('legalModal');
       const legalContent = document.getElementById('legalContent');
       document.getElementById('profileTermsLink').onclick = () => { legalContent.innerHTML = termsText; legalModal.classList.add('active'); };
